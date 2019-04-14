@@ -1,0 +1,8 @@
+pytest
+pytest-pep8
+pytest-assume
+pymodm
+flask
+dnspython
+python-dateutil
+sendgrid==5.6.0
