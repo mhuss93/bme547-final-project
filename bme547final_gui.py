@@ -85,8 +85,15 @@ def processed_window():
     # Area where processed image from server will display
     processed_image_label = ttk.Label(window2, text="Processed Image:")
     processed_image_label.grid(column=0, row=0, sticky=W, pady=5)
-    image_frame1 = ttk.Frame(window2)
-    image_frame1.grid(column=0, row=1, padx=20, pady=50, rowspan=6)
+    # image_frame1 = ttk.Frame(window2)
+    # image_frame1.grid(column=0, row=1, padx=20, pady=50, rowspan=6)
+    # img_obj = Image.open("Zoey.jpg")
+    # processed_image = ImageTk.PhotoImage(img_obj)
+    processed_image = PhotoImage(file="met.gif")
+    processed_image_space = ttk.Label(window2, image=processed_image)
+    processed_image_space.grid(column=0, row=1)
+    # label['image'] = processed_image
+    # image.grid(column=0, row=1, pady=5, padx=5)
     # Button to open window displaying original and processed image
     compare_button = ttk.Button(window2, text='Compare to Original')
     compare_button.grid(column=3, row=1, columnspan=2, pady=5)
@@ -133,6 +140,18 @@ def processed_window():
     save_button = ttk.Button(window2, text="Save Processed Image")
     save_button.grid(column=4, row=8, pady=5, padx=5)
     return
+
+
+def compare_window():
+    window3 = Tk()
+    window3.title("Image Comparison")
+    window3.geometry('400x300+100+100')
+
+
+def histogram_window():
+    window4 = Tk()
+    window4.title("Histogram of Image Color")
+    window4.geometry('400x300+100+100')
 
 
 if __name__ == '__main__':
