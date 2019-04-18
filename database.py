@@ -7,6 +7,9 @@ connect('mongodb+srv://mah148:7C2BeZmfwzWmSgwW@bme547-gxtrh.mongodb.net/'
 class User(MongoModel):
     userID = fields.CharField(primary_key=True)
 
+    class Meta:
+        connection_alias = 'bme547-db'
+
 
 class Image(MongoModel):
     name = fields.CharField(primary_key=True)
@@ -15,6 +18,9 @@ class Image(MongoModel):
     image = fields.CharField()
     uploadedAt = fields.DateTimeField()
     user = fields.ReferenceField(User)
+
+    class Meta:
+        connection_alias = 'bme547-db'
 
 
 class ProcessedImage(MongoModel):
@@ -29,3 +35,6 @@ class ProcessedImage(MongoModel):
     timeToProcess = fields.FloatField()
     user = fields.ReferenceField(User)
     baseImage = fields.ReferenceField(Image)
+
+    class Meta:
+        connection_alias = 'bme547-db'
