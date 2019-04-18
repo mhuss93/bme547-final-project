@@ -15,3 +15,17 @@ class Image(MongoModel):
     image = fields.CharField()
     uploadedAt = fields.DateTimeField()
     user = fields.ReferenceField(User)
+
+
+class ProcessedImage(MongoModel):
+    filename = fields.CharField()
+    image = fields.CharField()
+    procedureType = fields.ListField(
+        fields.CharField(choices=('HISTOGRAM_EQUALIZATION',
+                                  'CONTRAST_STRETCHING',
+                                  'LOG_COMPRESSION',
+                                  'REVERSE_VIDEO')))
+    processedAt = fields.DateTimeField()
+    timeToProcess = fields.FloatField()
+    user = fields.ReferenceField(User)
+    baseImage = fields.ReferenceField(Image)
