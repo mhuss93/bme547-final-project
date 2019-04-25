@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import imread, imshow, show, subplot, title
+from matplotlib.pyplot import get_cmap, hist
 from skimage.exposure import equalize_hist
 import numpy as np
 
