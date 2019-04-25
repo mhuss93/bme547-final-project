@@ -62,3 +62,5 @@ def upload_image(user_id, filename, extension, image_str):
                 uploadedAt=time,
                 user=user_id)
     img.save()
+    out = "Uploaded {} (userID: {}) at {}.".format(filename, user_id, time)
+    return out
