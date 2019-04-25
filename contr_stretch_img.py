@@ -25,7 +25,7 @@ def contr_str_img(img_loc):
 
 
 if __name__ == "__main__":
-    img, stretch_img = contr_str_img('image_0001.jpg')
+    img, stretch_img = contr_str_img('image_0041.jpg')
     plt.imsave('stretched_image.jpg', stretch_img)
     fig = plt.figure(figsize=(8, 5))
     subplot(221)

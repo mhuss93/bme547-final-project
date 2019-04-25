@@ -24,7 +24,7 @@ def equalize_img(img_loc):
 
 
 if __name__ == "__main__":
-    img, eq_img = equalize_img('image_0001.jpg')
+    img, eq_img = equalize_img('image_0008.jpg')
     plt.imsave('equalized_image.jpg', eq_img)
     subplot(221)
     imshow(img, cmap=get_cmap('gray'))
@@ -38,4 +38,5 @@ if __name__ == "__main__":
     subplot(224)
     hist(eq_img.flatten(), 256, range=(0, 256))
     title('Histogram of equalized')
+    fig.tight_layout()
     show()
