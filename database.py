@@ -51,6 +51,8 @@ def upload_image(user_id, filename, extension, image_str):
     :type extension: str
     :param image_str: Base-64 encoded image.
     :type image_str: str
+    :return: Job completed message.
+    :rtype: str
     """
 
     from datetime import datetime
