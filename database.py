@@ -67,3 +67,33 @@ def upload_image(user_id, filename, extension, image_str):
     img.save()
     out = "Uploaded {} (userID: {}) at {}.".format(filename, user_id, time)
     return out
+
+
+class UserExists(Exception):
+    pass
+
+
+def register_user(user_id):
+    """Register a new User on the Database.
+
+    :param user_id: Unique User Identifier.
+    :type user_id: str
+    :raises UserExists: Exception if User already exists.
+    :return: Operation completed string.
+    :rtype: str
+    """
+    u = None
+    try:
+        u = User.objects.raw({'_id': user_id}).first()
+    except User.DoesNotExist:
+        pass
+    finally:
+        if u is not None:
+            raise UserExists('User {} exists on the database.'.format(user_id))
+        else:
+            from datetime import datetime
+            time = datetime.now()
+            user = User(user_id, created=time)
+            user.save()
+            out = 'User {} registered.'.format(user_id)
+            return out

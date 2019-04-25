@@ -19,9 +19,9 @@ def test_connect():
     assert out.test_string == 'test1'
 
 
-def _test_user():
+def _test_user(uid):
     import database as db
-    db.User('1').save()
+    db.User(uid).save()
 
 
 @pytest.mark.parametrize("user_id, filename, extension, image_str", [
@@ -31,7 +31,7 @@ def test_upload_image(user_id, filename, extension, image_str):
     import database as db
     import datetime
 
-    _test_user()
+    _test_user('1')
     time = datetime.datetime.now()
     acceptable_timedelta = datetime.timedelta(seconds=10)
     db.upload_image(user_id, filename, extension, image_str)
@@ -43,3 +43,37 @@ def test_upload_image(user_id, filename, extension, image_str):
     pytest.assume(out.image == image_str)
     pytest.assume(out.user == db.User.objects.raw({'_id': user_id}).first())
     pytest.assume((out.uploadedAt - time) < acceptable_timedelta)
+
+
+def _del_user(uid):
+    import database as db
+    try:
+        u = db.User.objects.raw({'_id': uid}).first()
+    except db.User.DoesNotExist:
+        pass
+    else:
+        u.delete()
+
+
+def test_register_user():
+    import database as db
+    import datetime
+
+    _del_user('register_id')
+    time = datetime.datetime.now()
+    acceptable_timedelta = datetime.timedelta(seconds=10)
+
+    db.register_user('register_id')
+
+    out = db.User.objects.raw({'_id': 'register_id'}).first()
+    assert (out.created - time) < acceptable_timedelta
+
+
+def test_register_user_exception():
+    import database as db
+    import datetime
+
+    _test_user('exception_id')
+
+    with pytest.raises(db.UserExists):
+        db.register_user('exception_id')

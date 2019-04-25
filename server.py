@@ -15,7 +15,7 @@ def server_on():
 @app.route("/api/upload_user_image", methods=["POST"])
 def handler_upload_user_images():
     """
-    Uploads a new image for a givern user.
+    Uploads a new image for a given user.
     """
 
     r = request.get_json()
