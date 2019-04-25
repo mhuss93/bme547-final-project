@@ -25,7 +25,7 @@ def reverse_img(img_loc):
 
 if __name__ == "__main__":
     img, reverse_img = reverse_img('image_0001.jpg')
-    plt.imsave('stretched_image.jpg', reverse_img)
+    plt.imsave('reversed_image.jpg', reverse_img)
     fig = plt.figure(figsize=(8, 5))
     subplot(221)
     imshow(img, cmap=get_cmap('gray'))

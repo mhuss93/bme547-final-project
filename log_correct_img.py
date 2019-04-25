@@ -25,7 +25,7 @@ def log_correct_img(img_loc):
 
 if __name__ == "__main__":
     img, log_img = log_correct_img('image_0008.jpg')
-    plt.imsave('stretched_image.jpg', log_img)
+    plt.imsave('log_corrected_image.jpg', log_img)
     fig = plt.figure(figsize=(8, 5))
     subplot(221)
     imshow(img, cmap=get_cmap('gray'))
