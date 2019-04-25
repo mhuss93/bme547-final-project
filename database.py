@@ -38,3 +38,31 @@ class ProcessedImage(MongoModel):
 
     class Meta:
         connection_alias = 'bme547-db'
+
+
+def upload_image(user_id, filename, extension, image_str):
+    """Upload a base-64 encoded image to the database.
+
+    :param user_id: Unique User identifier.
+    :type user_id: str
+    :param filename: Image filename.
+    :type filename: str
+    :param extension: Image extension.
+    :type extension: str
+    :param image_str: Base-64 encoded image.
+    :type image_str: str
+    :return: Job completed message.
+    :rtype: str
+    """
+
+    from datetime import datetime
+    time = datetime.now()
+    img = Image(name=user_id+filename+extension,
+                filename=filename,
+                extension=extension,
+                image=image_str,
+                uploadedAt=time,
+                user=user_id)
+    img.save()
+    out = "Uploaded {} (userID: {}) at {}.".format(filename, user_id, time)
+    return out
