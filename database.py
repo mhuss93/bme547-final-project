@@ -6,6 +6,7 @@ connect('mongodb+srv://mah148:7C2BeZmfwzWmSgwW@bme547-gxtrh.mongodb.net/'
 
 class User(MongoModel):
     userID = fields.CharField(primary_key=True)
+    created = fields.DateTimeField()
 
     class Meta:
         connection_alias = 'bme547-db'
