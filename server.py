@@ -48,3 +48,6 @@ def handler_register_user():
         return jsonify(e.message), 422
     except db.UserExists as e:
         return jsonify(e), 200
+    except KeyError as e:
+        errormessage = 'Field {} is missing.'.format(e)
+        return jsonify(errormessage), 400
