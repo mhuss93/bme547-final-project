@@ -8,112 +8,98 @@ from tkinter import filedialog
 from PIL import ImageTk, Image
 
 
-def start_window():
+def main_window():
     root = Tk()
     root.title("Image Processor")
-    # Title message for main GUI window
-    welcome_message = ttk.Label(root, text="Welcome to the image processor.")
-    welcome_message.grid(column=0, row=0, columnspan=3, pady=5)
-    # Labels, boxes, and buttons for choosing an image file
-    open_file_label = ttk.Label(root,
-                                text="Select image file(s) for processing:")
-    open_file_label.grid(column=0, row=1, sticky=W, pady=5)
-    open_file_address = StringVar()
-    open_file_box = ttk.Entry(root, textvariable=open_file_address)
-    open_file_box.grid(column=1, row=1, padx=5)
+    root.grid_rowconfigure(9, weight=3)
+    # Title message
+    welcome_msg = ttk.Label(root, text="Welcome to the image processor!",
+                            font=(20))
+    welcome_msg.grid(column=0, row=0, columnspan=4, pady=15)
 
+    # Labels, boxes, and buttons for image file selection
     def open_file():
         open_file_address = filedialog.askopenfilename()
         open_file_box.insert(0, open_file_address)
         pass
-    browse_button = ttk.Button(root, text='Browse', command=open_file)
-    browse_button.grid(column=3, row=1)
-    # Checkboxes to choose image processing methods
-    processing_label = ttk.Label(root, text="Select image processing steps:")
-    processing_label.grid(column=0, row=2, sticky=W, pady=5)
-    process_1var = StringVar()
-    process_1var.set('+')
-    process_1 = ttk.Checkbutton(root, text="Histogram Equalization",
-                                variable=process_1var,
-                                onvalue='+', offvalue='-')
-    process_1.grid(column=0, row=3, sticky=W)
-    process_2var = StringVar()
-    process_2var.set('-')
-    process_2 = ttk.Checkbutton(root, text="Contrast Stretching",
-                                variable=process_2var,
-                                onvalue='+', offvalue='-')
-    process_2.grid(column=0, row=4, sticky=W)
-    process_3var = StringVar()
-    process_3var.set('-')
-    process_3 = ttk.Checkbutton(root, text="Log Compression",
-                                variable=process_3var,
-                                onvalue='+', offvalue='-')
-    process_3.grid(column=0, row=5, sticky=W)
-    process_4var = StringVar()
-    process_4var.set('-')
-    process_4 = ttk.Checkbutton(root, text="Reverse Video",
-                                variable=process_4var,
-                                onvalue='+', offvalue='-')
-    process_4.grid(column=0, row=6, sticky=W)
+    open_file_lbl = ttk.Label(root,
+                              text="Select image file(s) for processing:")
+    open_file_lbl.grid(column=0, row=1, pady=5, padx=10)
+    open_file_adrs = StringVar()
+    open_file_box = ttk.Entry(root, textvariable=open_file_adrs)
+    open_file_box.config(width=50)
+    open_file_box.grid(column=1, row=1, padx=5, columnspan=2)
+    browse_btn = ttk.Button(root, text='Browse', command=open_file)
+    browse_btn.grid(column=3, row=1)
+    # Frame for Image or Message Display
+    img_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE,
+                        width=380, height=380)
+    img_frm.grid(column=1, row=2, columnspan=3, rowspan=8, pady=5)
+    img_frm.grid_propagate(0)
+    img_frm.grid_rowconfigure(0, weight=1)  # Centering message in frame
+    img_frm.grid_rowconfigure(2, weight=1)
+    img_frm.grid_columnconfigure(0, weight=1)
+    img_frm.grid_columnconfigure(2, weight=1)
+    img_msg = ttk.Label(img_frm, text="No image file(s) selected")
+    img_msg.grid(column=0, row=1, columnspan=3)
+    # Frame and radio buttons to choose image processing method
+    proc_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE)
+    proc_frm.grid(column=0, row=3, pady=5, ipady=5)
+    proc_lbl = ttk.Label(proc_frm, text="Select image processing method")
+    proc_lbl.grid(column=0, row=0, pady=5)
+    proc_choice = StringVar()
+    proc_choice.set('Hist')
+    proc_1 = ttk.Radiobutton(proc_frm, text="Histogram Equalization",
+                             variable=proc_choice,
+                             value='Hist')
+    proc_1.grid(column=0, row=1, sticky=W, padx=20)
+    proc_2 = ttk.Radiobutton(proc_frm, text="Contrast Stretching",
+                             variable=proc_choice,
+                             value='Stretch')
+    proc_2.grid(column=0, row=2, sticky=W, padx=20)
+    proc_3 = ttk.Radiobutton(proc_frm, text="Log Compression",
+                             variable=proc_choice,
+                             value='Compress')
+    proc_3.grid(column=0, row=3, sticky=W, padx=20)
+    proc_4 = ttk.Radiobutton(proc_frm, text="Reverse Video",
+                             variable=proc_choice,
+                             value='Reverse')
+    proc_4.grid(column=0, row=4, sticky=W, padx=20)
 
-    def image_process():
-        print("File Location: {}".format(open_file_address.get()))
-        check1 = process_1var.get()
-        if check1 == '+':
-            print("Histogram Equalization")
-        check2 = process_2var.get()
-        if check2 == '+':
-            print("Contrast Stretching")
-        check3 = process_3var.get()
-        if check3 == '+':
-            print("Log Compression")
-        check4 = process_4var.get()
-        if check4 == '+':
-            print("Reverse Video")
-        processed_window()
-    # Button to process image and open up next window
-    process_btn = ttk.Button(root, text="Process my image(s)",
-                             command=image_process)
-    process_btn.grid(column=0, row=7, columnspan=3, pady=5)
+    # Button to end image to server for processing and open up next window
+    def img_proc():
+        proc = proc_choice.get()
+        print(proc)
+        window2()
+    proc_btn = ttk.Button(root, text="Process my image(s)",
+                          command=img_proc)
+    proc_btn.grid(column=0, row=9, sticky=N, pady=10)
     root.mainloop()
     return
 
 
-def processed_window():
-    window2 = Tk()
+def window2():
+    window2 = Toplevel()
     window2.title("Processed Image")
-    # Area where processed image from server will display
-    processed_image_label = ttk.Label(window2, text="Processed Image:")
-    processed_image_label.grid(column=0, row=0, sticky=W, pady=5)
-    # image_frame1 = ttk.Frame(window2)
-    # image_frame1.grid(column=0, row=1, padx=20, pady=50, rowspan=6)
-    # img_obj = Image.open("Zoey.jpg")
-    # processed_image = ImageTk.PhotoImage(img_obj)
-    processed_image = PhotoImage(file="met.gif")
-    processed_image_space = ttk.Label(window2, image=processed_image)
-    processed_image_space.grid(column=0, row=1)
-    # label['image'] = processed_image
-    # image.grid(column=0, row=1, pady=5, padx=5)
     # Button to open window displaying original and processed image
-    compare_button = ttk.Button(window2, text='Compare to Original')
-    compare_button.grid(column=3, row=1, columnspan=2, pady=5)
+    compare_btn = ttk.Button(window2, text='Compare to Original')
+    compare_btn.grid(column=3, row=1, columnspan=2, pady=5)
     # Button to open window displaying histogram of colors
-    histogram_button = ttk.Button(window2,
-                                  text='Histogram of Color Intensities')
-    histogram_button.grid(column=3, row=2, columnspan=2, pady=5)
+    histogram_btn = ttk.Button(window2,
+                               text='Histogram of Color Intensities')
+    histogram_btn.grid(column=3, row=2, columnspan=2, pady=5)
     # Metadata
-    timestamp_label = ttk.Label(window2, text="Time of Upload:")
-    timestamp_label.grid(column=3, row=3, pady=5, columnspan=2, sticky=W)
-    proctime_label = ttk.Label(window2, text="Time for Processing:")
-    proctime_label.grid(column=3, row=4, pady=5, columnspan=2, sticky=W)
-    size_label = ttk.Label(window2, text="Image Size:")
-    size_label.grid(column=3, row=5, pady=5, columnspan=2, sticky=W)
+    timestamp_lbl = ttk.Label(window2, text="Time of Upload:")
+    timestamp_lbl.grid(column=3, row=3, pady=5, columnspan=2, sticky=W)
+    proctime_lbl = ttk.Label(window2, text="Time for Processing:")
+    proctime_lbl.grid(column=3, row=4, pady=5, columnspan=2, sticky=W)
+    size_lbl = ttk.Label(window2, text="Image Size:")
+    size_lbl.grid(column=3, row=5, pady=5, columnspan=2, sticky=W)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
-    file_type.set('.jpg')
-    file_type_label = ttk.Label(window2,
-                                text="Select save file type:")
-    file_type_label.grid(column=0, row=7, sticky=W, pady=5)
+    file_type_lbl = ttk.Label(window2,
+                              text="Select save file type:")
+    file_type_lbl.grid(column=0, row=7, sticky=W, pady=5)
     jpg_box = ttk.Radiobutton(window2, text='JPEG',
                               variable=file_type, value='.jpg')
     jpg_box.grid(column=1, row=7, padx=15, sticky=W)
@@ -123,27 +109,29 @@ def processed_window():
     tiff_box = ttk.Radiobutton(window2, text='TIFF',
                                variable=file_type, value='.tiff')
     tiff_box.grid(column=3, row=7, padx=15, sticky=W)
+    file_type.set('.jpg')
     # Choose where to save the processed image
-    save_file_label = ttk.Label(window2, text="Select save location:")
-    save_file_label.grid(column=0, row=8, sticky=E, pady=5)
-    save_file_address = StringVar()
-    save_file_box = ttk.Entry(window2, textvariable=save_file_address)
+    save_file_lbl = ttk.Label(window2, text="Select save location:")
+    save_file_lbl.grid(column=0, row=8, sticky=E, pady=5)
+    save_file_adrs = StringVar()
+    save_file_box = ttk.Entry(window2, textvariable=save_file_adrs)
     save_file_box.grid(column=1, row=8, columnspan=2, padx=5)
 
     def save_file():
-        save_file_address = filedialog.askdirectory()
-        save_file_box.insert(0, save_file_address)
+        save_file_adrs = filedialog.askdirectory()
+        save_file_box.insert(0, save_file_adrs)
         pass
-    browse_button = ttk.Button(window2, text='Browse', command=save_file)
-    browse_button.grid(column=3, row=8, sticky=W)
+    browse_btn = ttk.Button(window2, text='Browse', command=save_file)
+    browse_btn.grid(column=3, row=8, sticky=W)
     # Save image button
-    save_button = ttk.Button(window2, text="Save Processed Image")
-    save_button.grid(column=4, row=8, pady=5, padx=5)
+    save_btn = ttk.Button(window2, text="Save Processed Image")
+    save_btn.grid(column=4, row=8, pady=5, padx=5)
+    window2.mainloop()
     return
 
 
 def compare_window():
-    window3 = Tk()
+    window3 = tk.Toplevel(window2)
     window3.title("Image Comparison")
     window3.geometry('400x300+100+100')
 
@@ -155,4 +143,4 @@ def histogram_window():
 
 
 if __name__ == '__main__':
-    start_window()
+    main_window()
