@@ -82,22 +82,24 @@ def window2():
     window2 = Toplevel()
     window2.title("Processed Image")
     # Frame and Label for Original Image
-    img1_label = ttk.Label(window2, text="Original Image", font='Arial 10 bold')
+    img1_label = ttk.Label(window2, text="Original Image",
+                           font='Arial 10 bold')
     img1_label.grid(column=0, row=0, columnspan=4, pady=5)
     img1_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                        width=380, height=380)
+                         width=380, height=380)
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5, padx=5)
     img1_frm.grid_propagate(0)
     # Frame and Label for processed Image
-    img2_label = ttk.Label(window2, text="Processed Image", font='Arial 10 bold')
+    img2_label = ttk.Label(window2, text="Processed Image",
+                           font='Arial 10 bold')
     img2_label.grid(column=4, row=0, pady=5)
     img2_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                        width=380, height=380)
+                         width=380, height=380)
     img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5)
     img2_frm.grid_propagate(0)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                        width=200, height=95)
+                         width=200, height=95)
     data_frm.grid(column=5, row=1, columnspan=2, pady=5, padx=5, sticky=N)
     data_frm.grid_propagate(0)
     # Metadata
@@ -110,7 +112,7 @@ def window2():
     # Button to open window displaying histogram of colors
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
-                               text='Show Color Histograms')
+                           text='Show Color Histograms')
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
