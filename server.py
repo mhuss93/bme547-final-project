@@ -31,3 +31,20 @@ def handler_upload_user_images():
     except KeyError as e:
         errormessage = 'Field {} is missing.'.format(e)
         return jsonify(errormessage), 400
+
+
+@app.route("/api/register_user", methods=["POST"])
+def handler_register_user():
+    """
+    Register a User on the database.
+    """
+
+    r = request.get_json()
+    try:
+        user_id = r['user_id']
+        message = db.register_user(user_id)
+        return jsonify(message), 200
+    except ValidationError as e:
+        return jsonify(e.message), 422
+    except db.UserExists as e:
+        return jsonify(e), 200
