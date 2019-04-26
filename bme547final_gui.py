@@ -17,23 +17,6 @@ def main_window():
     welcome_msg = ttk.Label(root, text="Welcome to the image processor!",
                             font=(20))
     welcome_msg.grid(column=0, row=0, columnspan=4, pady=15)
-    # Frame for Image or Message Display
-    img_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE,
-                        width=375, height=375)
-    img_frm.grid(column=1, row=2, columnspan=3, rowspan=8, pady=5, ipady=5)
-    img_frm.grid_propagate(0)
-    img_obj = Image.open("Zoey.jpg")
-    size = (375, 375)
-    img_obj.thumbnail(size)
-    img = ImageTk.PhotoImage(img_obj)
-    img_space = ttk.Label(img_frm, image=img)
-    img_space.grid(column=0, row=0, columnspan=3, rowspan=3)
-    # img_frm.grid_rowconfigure(0, weight=1)  # Centering message in frame
-    # img_frm.grid_rowconfigure(2, weight=1)
-    # img_frm.grid_columnconfigure(0, weight=1)
-    # img_frm.grid_columnconfigure(2, weight=1)
-    # img_msg = ttk.Label(img_frm, text="No image file(s) selected")
-    # img_msg.grid(column=0, row=1, columnspan=3)
 
     # Labels, boxes, and buttons for image file selection
     def open_file():
@@ -80,7 +63,7 @@ def main_window():
         window2()
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
-    proc_btn.grid(column=0, row=9, sticky=N, pady=10)
+    proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
     root.mainloop()
     return
 
