@@ -51,3 +51,26 @@ def handler_register_user():
     except KeyError as e:
         errormessage = 'Field {} is missing.'.format(e)
         return jsonify(errormessage), 400
+
+
+@app.route("/api/get_uploaded_image", methods=["POST"])
+def handler_get_uploaded_image():
+    """
+    Retrieve an image from the database.
+    """
+
+    r = request.get_json()
+    try:
+        user_id = r['user_id']
+        filename = r['filename']
+        extension = r['extension']
+        img_dict = db.get_uploaded_image(user_id, filename, extension)
+        return jsonify(img_dict), 200
+    except db.Image.DoesNotExist:
+        out = 'Requested Image does not exist: {}, {}.{}'.format(user_id,
+                                                                 filename,
+                                                                 extension)
+        return jsonify(out), 404
+    except KeyError as e:
+        errormessage = 'Field {} is missing.'.format(e)
+        return jsonify(errormessage), 400

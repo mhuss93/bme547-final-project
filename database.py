@@ -1,7 +1,23 @@
 from pymodm import connect, MongoModel, EmbeddedMongoModel, fields
+from pymodm.queryset import QuerySet
+from pymodm.manager import Manager
 
 connect('mongodb+srv://mah148:7C2BeZmfwzWmSgwW@bme547-gxtrh.mongodb.net/'
         'test?retryWrites=true', 'bme547-db')
+
+
+class ImageQuerySet(QuerySet):
+    def user(self, user_id):
+        '''Return all images uploaded by a User'''
+        return self.raw({'user': user_id})
+
+    def userimage(self, user_id, filename, extension):
+        '''Return user image indentified by filename and extension.'''
+        return self.raw({'user': user_id, 'filename': filename,
+                         'extension': extension}).first()
+
+
+ImageManager = Manager.from_queryset(ImageQuerySet)
 
 
 class User(MongoModel):
@@ -19,6 +35,8 @@ class Image(MongoModel):
     image = fields.CharField()
     uploadedAt = fields.DateTimeField()
     user = fields.ReferenceField(User)
+
+    objects = ImageManager()
 
     class Meta:
         connection_alias = 'bme547-db'
@@ -97,3 +115,24 @@ def register_user(user_id):
             user.save()
             out = 'User {} registered.'.format(user_id)
             return out
+
+
+def get_uploaded_image(user_id, filename, extension):
+    """Retrieve an uploaded image.
+
+    :param user_id: Unique User identifier.
+    :type user_id: str
+    :param filename: Filename.
+    :type filename: str
+    :param extension: Image extension.
+    :type extension: str
+    :return: Dictionary of image data.
+    :rtype: dict
+    """
+    img = Image.objects.userimage(user_id, filename, extension)
+    img_dict = {
+        'image': img.image,
+        'extension': img.extension,
+        'uploadedAt': img.uploadedAt,
+    }
+    return img_dict
