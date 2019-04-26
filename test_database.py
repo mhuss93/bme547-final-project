@@ -77,3 +77,23 @@ def test_register_user_exception():
 
     with pytest.raises(db.UserExists):
         db.register_user('exception_id')
+
+
+def test_get_uploaded_image():
+    import database as db
+
+    user_id = 'User1'
+    filename = 'test_image1'
+    extension = 'tiff'
+    image = 'test_str_b64'
+    _test_user(user_id)
+    db.Image(name=user_id+filename+extension,
+             filename=filename,
+             extension=extension,
+             user=user_id,
+             image=image).save()
+
+    out = db.get_uploaded_image(user_id, filename, extension)
+
+    pytest.assume(out['image'] == image)
+    pytest.assume(out['extension'] == extension)
