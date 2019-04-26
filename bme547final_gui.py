@@ -80,7 +80,7 @@ def main_window():
 
 def window2():
     window2 = Toplevel()
-    window2.title("Processed Image")
+    window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
     img1_label = ttk.Label(window2, text="Original Image",
                            font='Arial 10 bold')
@@ -102,17 +102,20 @@ def window2():
                          width=200, height=95)
     data_frm.grid(column=5, row=1, columnspan=2, pady=5, padx=5, sticky=N)
     data_frm.grid_propagate(0)
-    # Metadata
     timestamp_lbl = ttk.Label(data_frm, text="Time of Upload:")
     timestamp_lbl.grid(column=0, row=0, pady=5, sticky=W)
     proctime_lbl = ttk.Label(data_frm, text="Time for Processing:")
     proctime_lbl.grid(column=0, row=1, pady=5, sticky=W)
     size_lbl = ttk.Label(data_frm, text="Image Size:")
     size_lbl.grid(column=0, row=2, pady=5, sticky=W)
-    # Button to open window displaying histogram of colors
+
+    # Button to generate histogram of colors
+    def gen_histo():
+        window3()
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
-                           text='Show Color Histograms')
+                           text='Show Color Histograms',
+                           command=gen_histo)
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -129,32 +132,56 @@ def window2():
                                variable=file_type, value='.tiff')
     tiff_box.grid(column=3, row=3, padx=15, sticky=W)
     file_type.set('.jpg')
-    # Choose where to save the processed image
+
+    # Saving the processed image
+    def save_file():
+        save_file_adrs = filedialog.askopenfilename()
+        save_file_box.insert(0, save_file_adrs)
+        window2.lift()
+        pass
     save_file_lbl = ttk.Label(window2, text="Save processed image as:")
     save_file_lbl.grid(column=0, row=4, sticky=E, pady=5, padx=5)
     save_file_adrs = StringVar()
     save_file_box = ttk.Entry(window2, textvariable=save_file_adrs)
     save_file_box.grid(column=1, row=4, columnspan=4, padx=5)
     save_file_box.config(width=105)
-
-    def save_file():
-        save_file_adrs = filedialog.askopenfilename()
-        save_file_box.insert(0, save_file_adrs)
-        window2.lift()
-        pass
     browse_btn = ttk.Button(window2, text='Browse', command=save_file)
     browse_btn.grid(column=5, row=4, sticky=W)
-    # Save image button
     save_btn = ttk.Button(window2, text="Save Processed Image")
     save_btn.grid(column=6, row=4, pady=5, padx=5)
+    # Close window button
+    close_btn = ttk.Button(window2, text="Close Processed Image Viewer",
+                           command=window2.destroy)
+    close_btn.grid(column=0, row=5, columnspan=7, pady=10)
     window2.mainloop()
     return
 
 
-def histogram_window():
-    window4 = Tk()
-    window4.title("Histogram of Image Color")
-    window4.geometry('400x300+100+100')
+def window3():
+    window3 = Toplevel()
+    window3.title("Histogram Viewer")
+    # Frame and Label for Original Image Histogram
+    histo1_label = ttk.Label(window3, text="Original Image",
+                             font='Arial 10 bold')
+    histo1_label.grid(column=0, row=0, pady=5)
+    histo1_frm = ttk.Frame(window3, borderwidth=1, relief=GROOVE,
+                           width=380, height=380)
+    histo1_frm.grid(column=0, row=1, pady=5, padx=5)
+    histo1_frm.grid_propagate(0)
+    # Frame and Label for processed Image
+    histo2_label = ttk.Label(window3, text="Processed Image",
+                             font='Arial 10 bold')
+    histo2_label.grid(column=1, row=0, pady=5)
+    histo2_frm = ttk.Frame(window3, borderwidth=1, relief=GROOVE,
+                           width=380, height=380)
+    histo2_frm.grid(column=1, row=1,  pady=5, padx=5)
+    histo2_frm.grid_propagate(0)
+    # Close window button
+    close_btn = ttk.Button(window3, text="Close Histogram Viewer",
+                           command=window3.destroy)
+    close_btn.grid(column=0, row=2, columnspan=2, pady=10)
+    window3.mainloop()
+    return
 
 
 if __name__ == '__main__':
