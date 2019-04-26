@@ -2,9 +2,11 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
 from skimage import util
+from skimage.exposure import histogram
 import numpy as np
 
 
+# reverse video
 def reverse_img(img_loc):
     """
     Take address of image to be processed as img_loc.
@@ -18,14 +20,13 @@ def reverse_img(img_loc):
     log_img - 2D array of log corrected image
     """
     img = imread(img_loc)
-    print('img values: {}' .format(img))
     reverse_img = np.asarray(util.invert(img), dtype='uint8')
     return img, reverse_img
 
 
 if __name__ == "__main__":
     img, reverse_img = reverse_img('image_0001.jpg')
-    plt.imsave('reversed_image.jpg', reverse_img)
+    plt.imsave('reversed_image.tiff', reverse_img)
     fig = plt.figure(figsize=(8, 5))
     subplot(221)
     imshow(img, cmap=get_cmap('gray'))
@@ -41,3 +42,4 @@ if __name__ == "__main__":
     title('Histogram of Log Corrected')
     fig.tight_layout()
     show()
+    histogram(img, nbins=256, normalize=False)

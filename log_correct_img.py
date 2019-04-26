@@ -5,7 +5,7 @@ from skimage.exposure import adjust_log
 import numpy as np
 
 
-# constrast stretching
+# log correction
 def log_correct_img(img_loc):
     """
     Take address of image to be processed as img_loc.
