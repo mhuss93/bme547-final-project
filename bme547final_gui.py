@@ -6,6 +6,7 @@ from tkinter import *  # Brings in higher level tools
 from tkinter import ttk  # Themed packages
 from tkinter import filedialog
 from PIL import ImageTk, Image
+from pathlib import Path
 
 
 def main_window():
@@ -16,11 +17,28 @@ def main_window():
     welcome_msg = ttk.Label(root, text="Welcome to the image processor!",
                             font=(20))
     welcome_msg.grid(column=0, row=0, columnspan=4, pady=15)
+    # Frame for Image or Message Display
+    img_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE,
+                        width=375, height=375)
+    img_frm.grid(column=1, row=2, columnspan=3, rowspan=8, pady=5, ipady=5)
+    img_frm.grid_propagate(0)
+    img_obj = Image.open("Zoey.jpg")
+    size = (375, 375)
+    img_obj.thumbnail(size)
+    img = ImageTk.PhotoImage(img_obj)
+    img_space = ttk.Label(img_frm, image=img)
+    img_space.grid(column=0, row=0, columnspan=3, rowspan=3)
+    # img_frm.grid_rowconfigure(0, weight=1)  # Centering message in frame
+    # img_frm.grid_rowconfigure(2, weight=1)
+    # img_frm.grid_columnconfigure(0, weight=1)
+    # img_frm.grid_columnconfigure(2, weight=1)
+    # img_msg = ttk.Label(img_frm, text="No image file(s) selected")
+    # img_msg.grid(column=0, row=1, columnspan=3)
 
     # Labels, boxes, and buttons for image file selection
     def open_file():
-        open_file_address = filedialog.askopenfilename()
-        open_file_box.insert(0, open_file_address)
+        open_file_adrs = filedialog.askopenfilename()
+        open_file_box.insert(0, open_file_adrs)
         pass
     open_file_lbl = ttk.Label(root,
                               text="Select image file(s) for processing:")
@@ -31,17 +49,6 @@ def main_window():
     open_file_box.grid(column=1, row=1, padx=5, columnspan=2)
     browse_btn = ttk.Button(root, text='Browse', command=open_file)
     browse_btn.grid(column=3, row=1)
-    # Frame for Image or Message Display
-    img_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE,
-                        width=380, height=380)
-    img_frm.grid(column=1, row=2, columnspan=3, rowspan=8, pady=5)
-    img_frm.grid_propagate(0)
-    img_frm.grid_rowconfigure(0, weight=1)  # Centering message in frame
-    img_frm.grid_rowconfigure(2, weight=1)
-    img_frm.grid_columnconfigure(0, weight=1)
-    img_frm.grid_columnconfigure(2, weight=1)
-    img_msg = ttk.Label(img_frm, text="No image file(s) selected")
-    img_msg.grid(column=0, row=1, columnspan=3)
     # Frame and radio buttons to choose image processing method
     proc_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE)
     proc_frm.grid(column=0, row=3, pady=5, ipady=5)
@@ -82,21 +89,33 @@ def window2():
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
-    img1_label = ttk.Label(window2, text="Original Image",
-                           font='Arial 10 bold')
-    img1_label.grid(column=0, row=0, columnspan=4, pady=5)
+    img1_lbl = ttk.Label(window2, text="Original Image",
+                         font='Arial 10 bold')
+    img1_lbl.grid(column=0, row=0, columnspan=4, pady=5)
     img1_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=380, height=380)
-    img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5, padx=5)
+                         width=375, height=375)
+    img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
+                  padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    # Frame and Label for processed Image
-    img2_label = ttk.Label(window2, text="Processed Image",
-                           font='Arial 10 bold')
-    img2_label.grid(column=4, row=0, pady=5)
+    img1_obj = Image.open("Zoey.jpg")
+    size = (375, 375)
+    img1_obj.thumbnail(size)
+    img1 = ImageTk.PhotoImage(img1_obj)
+    img1_space = ttk.Label(img1_frm, image=img1)
+    img1_space.grid(column=0, row=0)
+    # Frame and Label for Processed Image
+    img2_lbl = ttk.Label(window2, text="Processed Image",
+                         font='Arial 10 bold')
+    img2_lbl.grid(column=4, row=0, pady=5)
     img2_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=380, height=380)
-    img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5)
+                         width=375, height=375)
+    img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5, ipady=5)
     img2_frm.grid_propagate(0)
+    img2_obj = Image.open("Zoey.jpg")
+    img2_obj.thumbnail(size)
+    img2 = ImageTk.PhotoImage(img2_obj)
+    img2_space = ttk.Label(img2_frm, image=img2)
+    img2_space.grid(column=0, row=0)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
                          width=200, height=95)
