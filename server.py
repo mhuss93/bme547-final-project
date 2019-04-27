@@ -76,5 +76,12 @@ def handler_get_uploaded_image():
         return jsonify(errormessage), 400
 
 
+@app.route("/api/process_existing_image", methods=["POST"])
+def handler_process_existing_image():
+    """
+    Process an image already on the server.
+    """
+    pass
+
 if __name__ == '__main__':
     app.run()
