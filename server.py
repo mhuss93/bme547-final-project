@@ -74,3 +74,7 @@ def handler_get_uploaded_image():
     except KeyError as e:
         errormessage = 'Field {} is missing.'.format(e)
         return jsonify(errormessage), 400
+
+
+if __name__ == '__main__':
+    app.run()
