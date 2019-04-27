@@ -19,18 +19,18 @@ def main_window():
     welcome_msg.grid(column=0, row=0, columnspan=4, pady=15)
 
     # Labels, boxes, and buttons for image file selection
-    def open_file():
-        open_file_adrs = filedialog.askopenfilename()
-        open_file_box.insert(0, open_file_adrs)
-        pass
+    def ask_file():
+        file_adrs = filedialog.askopenfilename()
+        open_file_box.insert(0, file_adrs)
+        return
     open_file_lbl = ttk.Label(root,
                               text="Select image file(s) for processing:")
     open_file_lbl.grid(column=0, row=1, pady=5, padx=10)
-    open_file_adrs = StringVar()
-    open_file_box = ttk.Entry(root, textvariable=open_file_adrs)
+    file_adrs = StringVar()
+    open_file_box = ttk.Entry(root, textvariable=file_adrs)
     open_file_box.config(width=50)
     open_file_box.grid(column=1, row=1, padx=5, columnspan=2)
-    browse_btn = ttk.Button(root, text='Browse', command=open_file)
+    browse_btn = ttk.Button(root, text='Browse', command=ask_file)
     browse_btn.grid(column=3, row=1)
     # Frame and radio buttons to choose image processing method
     proc_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE)
@@ -45,21 +45,24 @@ def main_window():
     proc_1.grid(column=0, row=1, sticky=W, padx=20)
     proc_2 = ttk.Radiobutton(proc_frm, text="Contrast Stretching",
                              variable=proc_choice,
-                             value='Stretch')
+                             value='Contrast')
     proc_2.grid(column=0, row=2, sticky=W, padx=20)
     proc_3 = ttk.Radiobutton(proc_frm, text="Log Compression",
                              variable=proc_choice,
-                             value='Compress')
+                             value='Log')
     proc_3.grid(column=0, row=3, sticky=W, padx=20)
     proc_4 = ttk.Radiobutton(proc_frm, text="Reverse Video",
                              variable=proc_choice,
                              value='Reverse')
     proc_4.grid(column=0, row=4, sticky=W, padx=20)
 
-    # Button to end image to server for processing and open up next window
+    # Button to send image to server for processing and open up next window
     def img_proc():
         proc = proc_choice.get()
         print(proc)
+        img_file = open_file_box.get()
+        img=Image.open(img_file)
+        img.show()
         window2()
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
