@@ -91,5 +91,14 @@ def handler_get_processed_image():
     """
     pass
 
+
+@app.route("/api/user_metadata", methods=["POST"])
+def handler_user_metadata():
+    """
+    Retrieve user data.
+    """
+    pass
+
+
 if __name__ == '__main__':
     app.run()
