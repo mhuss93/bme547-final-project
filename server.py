@@ -83,5 +83,13 @@ def handler_process_existing_image():
     """
     pass
 
+
+@app.route("/api/get_processed_image", methods=["POST"])
+def handler_get_processed_image():
+    """
+    Retrieve a processed image from teh database.
+    """
+    pass
+
 if __name__ == '__main__':
     app.run()
