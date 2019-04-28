@@ -18,8 +18,8 @@ from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
 
 # Mock variables for testing
-img1_file = "Zoey.jpg"
-img2_file = "Zoey.jpg"
+img1_path = "Zoey.jpg"
+img2_path = "Zoey.jpg"
 r1 = [1, 5, 100, 225]
 b1 = [4, 90, 100, 90]
 g1 = [7, 30, 200, 175]
@@ -101,7 +101,7 @@ def window2(img1_file, img2_file):
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
                   padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    img1_obj = Image.open(img1_file)
+    img1_obj = Image.open(img1_path)
     size = (375, 375)
     img1_obj.thumbnail(size)
     img1 = ImageTk.PhotoImage(img1_obj)
@@ -115,7 +115,7 @@ def window2(img1_file, img2_file):
                          width=375, height=375)
     img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5, ipady=5)
     img2_frm.grid_propagate(0)
-    img2_obj = Image.open(img2_file)
+    img2_obj = Image.open(img2_path)
     img2_obj.thumbnail(size)
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
@@ -135,7 +135,7 @@ def window2(img1_file, img2_file):
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
                            text='Show Color Histograms',
-                           command=lambda: plt_histo(r1, r2, g1, g2, b1, b2))
+                           command=lambda: plt_histo(img1_path, img2_path))
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -183,8 +183,28 @@ def window2(img1_file, img2_file):
     return
 
 
-def plt_histo(r1, r2, g1, g2, b1, b2):
-    # Histogram for original image
+def plt_histo(img1_path, img2_path):
+    img1 = imread(img1_path)
+    img2 = imread(img1_path)
+    img1_shape = img1.shape
+    img2_shape = img2.shape
+    r1 = []
+    g1 = []
+    b1 = []
+    r2 = []
+    g2 = []
+    b2 = []
+    for i in range(img1_shape[0]):
+        for j in range(img1_shape[1]):
+            r1.append(img1[i, j, 0])
+            g1.append(img1[i, j, 1])
+            b1.append(img1[i, j, 2])
+    for i in range(img2_shape[0]):
+        for j in range(img2_shape[1]):
+            r2.append(img2[i, j, 0])
+            g2.append(img2[i, j, 1])
+            b2.append(img2[i, j, 2])
+    # Plot Histogram for original image
     plt.figure(1)
     plt.suptitle('Original Image')
     subplot(311)
