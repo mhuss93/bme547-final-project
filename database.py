@@ -136,3 +136,26 @@ def get_uploaded_image(user_id, filename, extension):
         'uploadedAt': img.uploadedAt,
     }
     return img_dict
+
+
+def process_image(img, method):
+    """TODO: add actual image manipulation methods.
+
+    :param img: Image array.
+    :type img: np.array
+    :param method: Image manipulation method to apply.
+    :type method: str
+    :raises ValueError: Error if invalid method is submitted.
+    :return: Processed image.
+    :rtype: np.array
+    """
+    if method == 'Hist':
+        return img
+    elif method == 'Contrast':
+        return img
+    elif method == 'Log':
+        return img
+    elif method == 'Reverse':
+        return img
+    else:
+        raise ValueError('Invalid method: {}.'.format(method))
