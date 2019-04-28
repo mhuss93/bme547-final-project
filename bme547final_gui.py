@@ -7,6 +7,25 @@ from tkinter import ttk  # Themed packages
 from tkinter import filedialog
 from PIL import ImageTk, Image
 from pathlib import Path
+import io
+import base64
+import io
+import matplotlib as mpl
+import numpy as np
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
+from matplotlib.pyplot import imread, imshow, show, subplot, title
+from matplotlib.pyplot import get_cmap, hist
+
+# Mock variables for testing
+img1_file = "Zoey.jpg"
+img2_file = "Zoey.jpg"
+r1 = [1, 5, 100, 225]
+b1 = [4, 90, 100, 90]
+g1 = [7, 30, 200, 175]
+r2 = [4, 70, 130, 15]
+b2 = [113, 80, 234, 190]
+g2 = [3, 80, 230, 17]
 
 
 def main_window():
@@ -59,11 +78,10 @@ def main_window():
     # Button to send image to server for processing and open up next window
     def img_proc():
         proc = proc_choice.get()
+        img_path = open_file_box.get()
+        print(img_path)
         print(proc)
-        img_file = open_file_box.get()
-        img=Image.open(img_file)
-        img.show()
-        window2()
+        window2("Zoey.jpg", "Zoey.jpg")
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
     proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
@@ -71,7 +89,7 @@ def main_window():
     return
 
 
-def window2():
+def window2(img1_file, img2_file):
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
@@ -83,7 +101,7 @@ def window2():
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
                   padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    img1_obj = Image.open("Zoey.jpg")
+    img1_obj = Image.open(img1_file)
     size = (375, 375)
     img1_obj.thumbnail(size)
     img1 = ImageTk.PhotoImage(img1_obj)
@@ -97,7 +115,7 @@ def window2():
                          width=375, height=375)
     img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5, ipady=5)
     img2_frm.grid_propagate(0)
-    img2_obj = Image.open("Zoey.jpg")
+    img2_obj = Image.open(img2_file)
     img2_obj.thumbnail(size)
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
@@ -113,14 +131,11 @@ def window2():
     proctime_lbl.grid(column=0, row=1, pady=5, sticky=W)
     size_lbl = ttk.Label(data_frm, text="Image Size:")
     size_lbl.grid(column=0, row=2, pady=5, sticky=W)
-
-    # Button to generate histogram of colors
-    def gen_histo():
-        window3()
+    # Button to open histogram window
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
                            text='Show Color Histograms',
-                           command=gen_histo)
+                           command=lambda: plt_histo(r1, r2, g1, g2, b1, b2))
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -138,11 +153,16 @@ def window2():
     tiff_box.grid(column=3, row=3, padx=15, sticky=W)
     file_type.set('.jpg')
 
-    # Saving the processed image
-    def save_file():
+    # Choosing a save location for the processed image
+    def ask_file():
         save_file_adrs = filedialog.askopenfilename()
         save_file_box.insert(0, save_file_adrs)
         window2.lift()
+        return save_file_adrs
+
+    # Saving the file
+    def save_file():
+        img2_obj.save(save_file_adrs)
         pass
     save_file_lbl = ttk.Label(window2, text="Save processed image as:")
     save_file_lbl.grid(column=0, row=4, sticky=E, pady=5, padx=5)
@@ -150,9 +170,10 @@ def window2():
     save_file_box = ttk.Entry(window2, textvariable=save_file_adrs)
     save_file_box.grid(column=1, row=4, columnspan=4, padx=5)
     save_file_box.config(width=105)
-    browse_btn = ttk.Button(window2, text='Browse', command=save_file)
+    browse_btn = ttk.Button(window2, text='Browse', command=ask_file)
     browse_btn.grid(column=5, row=4, sticky=W)
-    save_btn = ttk.Button(window2, text="Save Processed Image")
+    save_btn = ttk.Button(window2, text="Save Processed Image",
+                          command=save_file)
     save_btn.grid(column=6, row=4, pady=5, padx=5)
     # Close window button
     close_btn = ttk.Button(window2, text="Close Processed Image Viewer",
@@ -162,30 +183,37 @@ def window2():
     return
 
 
-def window3():
-    window3 = Toplevel()
-    window3.title("Histogram Viewer")
-    # Frame and Label for Original Image Histogram
-    histo1_label = ttk.Label(window3, text="Original Image",
-                             font='Arial 10 bold')
-    histo1_label.grid(column=0, row=0, pady=5)
-    histo1_frm = ttk.Frame(window3, borderwidth=1, relief=GROOVE,
-                           width=380, height=380)
-    histo1_frm.grid(column=0, row=1, pady=5, padx=5)
-    histo1_frm.grid_propagate(0)
-    # Frame and Label for processed Image
-    histo2_label = ttk.Label(window3, text="Processed Image",
-                             font='Arial 10 bold')
-    histo2_label.grid(column=1, row=0, pady=5)
-    histo2_frm = ttk.Frame(window3, borderwidth=1, relief=GROOVE,
-                           width=380, height=380)
-    histo2_frm.grid(column=1, row=1,  pady=5, padx=5)
-    histo2_frm.grid_propagate(0)
-    # Close window button
-    close_btn = ttk.Button(window3, text="Close Histogram Viewer",
-                           command=window3.destroy)
-    close_btn.grid(column=0, row=2, columnspan=2, pady=10)
-    window3.mainloop()
+def plt_histo(r1, r2, g1, g2, b1, b2):
+    # Histogram for original image
+    plt.figure(1)
+    plt.suptitle('Original Image')
+    subplot(311)
+    hist(r1, 256, range=(0, 256), color='red')
+    title('Red')
+    subplot(312)
+    hist(g1, 256, range=(0, 256), color='green')
+    title('Green')
+    subplot(313)
+    hist(b1, 256, range=(0, 256), color='blue')
+    title('Blue')
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.88, right=0.93)
+    plt.subplots_adjust(top=0.88)
+    # Histogram for processed image
+    plt.figure(2)
+    plt.suptitle('Processed Image')
+    subplot(311)
+    hist(r2, 256, range=(0, 256), color='red')
+    title('Red')
+    subplot(312)
+    hist(g2, 256, range=(0, 256), color='green')
+    title('Green')
+    subplot(313)
+    hist(b2, 256, range=(0, 256), color='blue')
+    title('Blue')
+    plt.tight_layout()
+    plt.subplots_adjust(top=0.88, right=0.93)
+    plt.show()
     return
 
 
