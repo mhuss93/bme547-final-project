@@ -100,5 +100,13 @@ def handler_user_metadata():
     pass
 
 
+@app.route("/api/image_processing_metadata", methods=["POST"])
+def handler_image_processing_metdata():
+    """
+    Retrieve data about image processing operations.
+    """
+    pass
+
+
 if __name__ == '__main__':
     app.run()
