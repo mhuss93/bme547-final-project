@@ -76,5 +76,37 @@ def handler_get_uploaded_image():
         return jsonify(errormessage), 400
 
 
+@app.route("/api/process_existing_image", methods=["POST"])
+def handler_process_existing_image():
+    """
+    Process an image already on the server.
+    """
+    pass
+
+
+@app.route("/api/get_processed_image", methods=["POST"])
+def handler_get_processed_image():
+    """
+    Retrieve a processed image from teh database.
+    """
+    pass
+
+
+@app.route("/api/user_metadata", methods=["POST"])
+def handler_user_metadata():
+    """
+    Retrieve user data.
+    """
+    pass
+
+
+@app.route("/api/image_processing_metadata", methods=["POST"])
+def handler_image_processing_metdata():
+    """
+    Retrieve data about image processing operations.
+    """
+    pass
+
+
 if __name__ == '__main__':
     app.run()
