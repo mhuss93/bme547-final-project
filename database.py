@@ -55,6 +55,8 @@ class ProcessedImage(MongoModel):
     user = fields.ReferenceField(User)
     baseImage = fields.ReferenceField(Image)
 
+    objects = ImageManager()
+
     class Meta:
         connection_alias = 'bme547-db'
 
