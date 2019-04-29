@@ -166,4 +166,31 @@ def process_image(img, method):
         raise ValueError('Invalid method: {}.'.format(method))
 
 
-def save_processed_image(proc_image_str, user_id, )
+def save_processed_image(filename, proc_image_str, user_id, proceduretype,
+                         processedat, timetoprocess, already_processed=False):
+    """Save a processed image to the database.
+
+    :param filename: Base image filename.
+    :type filename: str
+    :param proc_image_str: Base64 encoded processed image.
+    :type proc_image_str: str
+    :param user_id: User ID.
+    :type user_id: str
+    :param proceduretype: Procedure performed.
+    :type proceduretype: str
+    :param processedat: Time image was processed.
+    :type processedat: datetime object
+    :param timetoprocess: Time taken to process image (s)
+    :type timetoprocess: float
+    :param already_processed: If image has alrady been processed, defaults to
+        False.
+    :type already_processed: bool, optional
+    """
+
+    img = ProcessedImage(filename=filename,
+                         image=proc_image_str,
+                         user=user_id,
+                         procedureType=proceduretype,
+                         processedAt=processedat,
+                         timetoprocess=timetoprocess)
+    img.save()
