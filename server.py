@@ -25,7 +25,7 @@ def handler_upload_user_images():
         user_id = r['user_id']
         filename = r['filename']
         extension = r['extension']
-        image_str = r['image']
+        image_str = r['original_image']
         method = r['method']
         img = str2imgArray(image_str)
         if method != 'none':
@@ -47,9 +47,12 @@ def handler_upload_user_images():
             message_up = db.upload_image(user_id, filename, extension,
                                          image_str)
             message_proc = "No image manipulation performed."
+            proc_img_str = None
         return_dict = {
             'upload_status': message_up,
-            'processed_status': message_proc
+            'processed_status': message_proc,
+            'original_image': image_str,
+            'processed_image': proc_img_str,
         }
         return jsonify(return_dict), 200
     except ValidationError as e:
