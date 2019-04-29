@@ -151,7 +151,7 @@ def get_uploaded_image(user_id, filename, extension):
     return img_dict
 
 
-def process_image(img, methodlist):
+def process_image(img, method):
     """Perform image manipulation.
 
     :param img: Image array.
@@ -165,7 +165,6 @@ def process_image(img, methodlist):
     import img_proc_server as im
     import datetime
     time = datetime.datetime.now()
-    method = methodlist[-1]
     if method == 'Hist':
         proc_img = im.equalize_hist(img)
     elif method == 'Contrast':
