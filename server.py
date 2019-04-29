@@ -14,6 +14,7 @@ def server_on():
 
 @app.route("/api/upload_user_image", methods=["POST"])
 def handler_upload_user_images():
+    import datetime
     """
     Uploads a new image for a given user.
     """
@@ -26,10 +27,29 @@ def handler_upload_user_images():
         image_str = r['image']
         method = r['method']
         img = decode_image(image_str)
-        proc_img = db.process_image(img, method)
-        proc_img_str = encode_image(proc_img)
-        message = db.upload_image(user_id, filename, extension, image_str)
-        return jsonify(message), 200
+        if method != 'none':
+            time = datetime.datetime.now()
+            timetoprocess, proc_img = db.process_image(img, method)
+            proc_img_str = encode_image(proc_img)
+            message_up = db.upload_image(user_id, filename, extension,
+                                         image_str)
+            message_proc = db.save_processed_image(
+                filename,
+                proc_img_str,
+                user_id,
+                method,
+                time,
+                timetoprocess,
+            )
+        else:
+            message_up = db.upload_image(user_id, filename, extension,
+                                         image_str)
+            message_proc = "No image manipulation performed."
+        return_dict = {
+            'upload_status': message_up,
+            'processed_status': message_proc
+        }
+        return jsonify(return_dict), 200
     except ValidationError as e:
         return jsonify(e.message), 422
     except KeyError as e:
@@ -118,6 +138,7 @@ def decode_image(imgstr):
 
 def encode_image(img):
     return img
+
 
 if __name__ == '__main__':
     app.run()

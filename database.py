@@ -46,10 +46,10 @@ class ProcessedImage(MongoModel):
     filename = fields.CharField()
     image = fields.CharField()
     procedureType = fields.ListField(
-        fields.CharField(choices=('HISTOGRAM_EQUALIZATION',
-                                  'CONTRAST_STRETCHING',
-                                  'LOG_COMPRESSION',
-                                  'REVERSE_VIDEO')))
+        fields.CharField(choices=('Hist',
+                                  'Contrast',
+                                  'Log',
+                                  'REeverse')))
     processedAt = fields.DateTimeField()
     timeToProcess = fields.FloatField()
     user = fields.ReferenceField(User)
@@ -187,7 +187,8 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
         False.
     :type already_processed: bool, optional
     """
-
+    import datetime
+    time = datetime.datetime.now()
     img = ProcessedImage(filename=filename,
                          image=proc_image_str,
                          user=user_id,
@@ -195,3 +196,8 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
                          processedAt=processedat,
                          timeToProcess=timetoprocess)
     img.save()
+    out = "Uploaded {} (process:{}) (userID: {}) at {}.".format(filename,
+                                                                proceduretype,
+                                                                user_id,
+                                                                time)
+    return out
