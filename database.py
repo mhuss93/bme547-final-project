@@ -191,7 +191,7 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
     img = ProcessedImage(filename=filename,
                          image=proc_image_str,
                          user=user_id,
-                         procedureType=proceduretype,
+                         procedureType=[proceduretype],
                          processedAt=processedat,
-                         timetoprocess=timetoprocess)
+                         timeToProcess=timetoprocess)
     img.save()

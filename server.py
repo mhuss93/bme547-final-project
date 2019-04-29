@@ -24,6 +24,10 @@ def handler_upload_user_images():
         filename = r['filename']
         extension = r['extension']
         image_str = r['image']
+        method = r['method']
+        img = decode_image(image_str)
+        proc_img = db.process_image(img, method)
+        proc_img_str = encode_image(proc_img)
         message = db.upload_image(user_id, filename, extension, image_str)
         return jsonify(message), 200
     except ValidationError as e:
@@ -107,6 +111,13 @@ def handler_image_processing_metdata():
     """
     pass
 
+
+def decode_image(imgstr):
+    return imgstr
+
+
+def encode_image(img):
+    return img
 
 if __name__ == '__main__':
     app.run()
