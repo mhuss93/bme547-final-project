@@ -22,7 +22,7 @@ from flask import Flask, jsonify, request
 import os
 
 # Global variables
-url = 'http://127.0.0.1:5000'
+url = 'http://vcm-8935.vm.duke.edu:5000'
 multi_file = 0
 userID = ''
 mockDB = {
@@ -200,8 +200,8 @@ def window2():
     file_names = meta_dic["filenames"]
     extensions = meta_dic["extension"]
     methods = meta_dic["proc_types"]
-    proc_times = meta_dic["proc_times"]
-    processedAt = meta_dic["proc_procssedAt"]
+    proc_time_list = meta_dic["proc_times"]
+    processedAt_list = meta_dic["proc_processedAt"]
     # Drop down menu to select file to view
     drop_lbl = ttk.Label(window2, text='Select Image to View:')
     drop_lbl.grid(column=2, row=0, columnspan=2, pady=5, sticky=E)
@@ -211,12 +211,16 @@ def window2():
     drop_menu.grid(column=4, row=0, pady=5, padx=10)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=200, height=95)
+                         width=250, height=70)
     data_frm.grid(column=5, row=2, columnspan=2, pady=5, padx=5, sticky=N)
     data_frm.grid_propagate(0)
-    timestamp_lbl = ttk.Label(data_frm, text="Time of Upload:")
+    time = StringVar()
+    time_proc = StringVar()
+    time.set("Time of upload: ")
+    time_proc.set("Time for processing: ")
+    timestamp_lbl = ttk.Label(data_frm, textvariable=time)
     timestamp_lbl.grid(column=0, row=0, pady=5, sticky=W)
-    proctime_lbl = ttk.Label(data_frm, text="Time for Processing:")
+    proctime_lbl = ttk.Label(data_frm, textvariable=time_proc)
     proctime_lbl.grid(column=0, row=1, pady=5, sticky=W)
     # Frame and Label for Original Image
     img1_lbl = ttk.Label(window2, text="Original Image",
@@ -245,7 +249,7 @@ def window2():
         r = requests.post(url + "/api/get_uploaded_image",
                           json=dic_short)
         img_dict = r.json()
-        b64_string = img_dict['original_image']
+        b64_string = img_dict['image']
         img_bytes = base64.b64decode(b64_string)
         img_buf = io.BytesIO(img_bytes)
         img1_array = mpimg.imread(img_buf,
@@ -269,7 +273,7 @@ def window2():
         r = requests.post(url + "/api/get_processed_image",
                           json=dic_short)
         img_dict = r.json()
-        b64_string = img_dict['processed_image']
+        b64_string = img_dict['img']
         img_bytes = base64.b64decode(b64_string)
         img_buf = io.BytesIO(img_bytes)
         img2_array = mpimg.imread(img_buf,
@@ -282,7 +286,7 @@ def window2():
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
     img2_space.grid(column=0, row=0)
-
+    
     # Refresh button
     def refresh_img():
         global img1_array
@@ -292,8 +296,8 @@ def window2():
                 file_name = file_names[i]
                 extension = extensions[i]
                 method = methods[i]
-                proc_time = proc_times[i]
-                procAt = processedAt[i]
+                proc_time = proc_time_list[i]
+                procAt = processedAt_list[i]
         dic1 = {
                "user_id": userID,
                "filename": file_name,
@@ -319,11 +323,14 @@ def window2():
         img2 = ImageTk.PhotoImage(img2_obj)
         img2_space.configure(image=img2)
         img2_space.image = img2
-        proctime_lbl.configure(text="Time for Processing: "+proc_time)
-        proctime_lbl.text = "Time for Processing: "+proc_time
-        timestamp_lbl.configure(text="Time of Upload: "+procAt)
-        timestamp_lbl.text = "Time of Upload: "+procAt
+        time.set("Time for Processing: " + str(proc_time))
+        time_proc.set("Time of Upload: " + str(procAt))
+        # proctime_lbl.configure(text="Time for Processing: " + str(proc_time))
+        # proctime_lbl.text = "Time for Processing: " + str(proc_time)
+        # timestamp_lbl.configure(text="Time of Upload: " + str(procAt))
+        # timestamp_lbl.text = "Time of Upload: " + str(procAt)
         pass
+    refresh_img()
     refresh_btn = ttk.Button(window2, text='Refresh Image',
                              command=refresh_img)
     refresh_btn.grid(column=5, row=0, pady=5, sticky=W)
