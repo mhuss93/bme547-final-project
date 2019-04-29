@@ -426,8 +426,8 @@ def window2():
         size_y = size_val[1]
         time.set("Time for Processing: " + str(proc_time))
         time_proc.set("Time of Upload: " + str(procAt))
-        size_var.set("Image Size (pixels): " + str(size_x) 
-                     + " x " + str(size_y))
+        dimensions = str(size_x) + " x " + str(size_y)
+        size_var.set("Image Size (pixels): " + dimensions)
         pass
     refresh_img()
     refresh_btn = ttk.Button(window2, text='Refresh Image',
