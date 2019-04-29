@@ -16,6 +16,12 @@ class ImageQuerySet(QuerySet):
         return self.raw({'user': user_id, 'filename': filename,
                          'extension': extension}).first()
 
+    def userprocessedimage(self, user_id, filename, extension, procedure):
+        '''Return user image indentified by filename and extension.'''
+        return self.raw({'user': user_id, 'filename': filename,
+                         'extension': extension,
+                         'procedureType': [procedure]}).first()
+
 
 ImageManager = Manager.from_queryset(ImageQuerySet)
 
@@ -49,11 +55,12 @@ class ProcessedImage(MongoModel):
         fields.CharField(choices=('Hist',
                                   'Contrast',
                                   'Log',
-                                  'REeverse')))
+                                  'Reverse')))
     processedAt = fields.DateTimeField()
     timeToProcess = fields.FloatField()
     user = fields.ReferenceField(User)
     baseImage = fields.ReferenceField(Image)
+    extension = fields.CharField()
 
     objects = ImageManager()
 
@@ -171,7 +178,8 @@ def process_image(img, method):
 
 
 def save_processed_image(filename, proc_image_str, user_id, proceduretype,
-                         processedat, timetoprocess, already_processed=False):
+                         processedat, timetoprocess, extension,
+                         already_processed=False):
     """Save a processed image to the database.
 
     :param filename: Base image filename.
@@ -197,7 +205,8 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
                          user=user_id,
                          procedureType=[proceduretype],
                          processedAt=processedat,
-                         timeToProcess=timetoprocess)
+                         timeToProcess=timetoprocess,
+                         extension=extension)
     img.save()
     out = "Uploaded {} (process:{}) (userID: {}) at {}.".format(filename,
                                                                 proceduretype,
