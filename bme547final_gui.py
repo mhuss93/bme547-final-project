@@ -17,16 +17,6 @@ import matplotlib.image as mpimg
 from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
 
-# Mock variables for testing
-img1_path = "Zoey.jpg"
-img2_path = "Zoey.jpg"
-r1 = [1, 5, 100, 225]
-b1 = [4, 90, 100, 90]
-g1 = [7, 30, 200, 175]
-r2 = [4, 70, 130, 15]
-b2 = [113, 80, 234, 190]
-g2 = [3, 80, 230, 17]
-
 
 def main_window():
     root = Tk()
@@ -79,9 +69,8 @@ def main_window():
     def img_proc():
         proc = proc_choice.get()
         img_path = open_file_box.get()
-        print(img_path)
         print(proc)
-        window2("Zoey.jpg", "Zoey.jpg")
+        window2(img_path, "Zoey.jpg")
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
     proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
@@ -97,11 +86,11 @@ def window2(img1_file, img2_file):
                          font='Arial 10 bold')
     img1_lbl.grid(column=0, row=0, columnspan=4, pady=5)
     img1_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=375, height=375)
+                         width=380, height=380)
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
                   padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    img1_obj = Image.open(img1_path)
+    img1_obj = Image.open(img1_file)
     size = (375, 375)
     img1_obj.thumbnail(size)
     img1 = ImageTk.PhotoImage(img1_obj)
@@ -112,10 +101,10 @@ def window2(img1_file, img2_file):
                          font='Arial 10 bold')
     img2_lbl.grid(column=4, row=0, pady=5)
     img2_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=375, height=375)
+                         width=380, height=380)
     img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5, ipady=5)
     img2_frm.grid_propagate(0)
-    img2_obj = Image.open(img2_path)
+    img2_obj = Image.open(img2_file)
     img2_obj.thumbnail(size)
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
@@ -135,7 +124,7 @@ def window2(img1_file, img2_file):
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
                            text='Show Color Histograms',
-                           command=lambda: plt_histo(img1_path, img2_path))
+                           command=lambda: plt_histo(img1_file, img2_file))
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -155,14 +144,15 @@ def window2(img1_file, img2_file):
 
     # Choosing a save location for the processed image
     def ask_file():
-        save_file_adrs = filedialog.askopenfilename()
+        save_file_adrs = filedialog.asksaveasfilename()
         save_file_box.insert(0, save_file_adrs)
         window2.lift()
-        return save_file_adrs
+        pass
 
     # Saving the file
     def save_file():
-        img2_obj.save(save_file_adrs)
+        file_path = save_file_adrs.get() + file_type.get()
+        img2_obj.save(file_path)
         pass
     save_file_lbl = ttk.Label(window2, text="Save processed image as:")
     save_file_lbl.grid(column=0, row=4, sticky=E, pady=5, padx=5)
@@ -183,9 +173,10 @@ def window2(img1_file, img2_file):
     return
 
 
-def plt_histo(img1_path, img2_path):
-    img1 = imread(img1_path)
-    img2 = imread(img1_path)
+def plt_histo(img1_file, img2_file):
+    # Generate arrays of color values from image files
+    img1 = imread(img1_file)
+    img2 = imread(img2_file)
     img1_shape = img1.shape
     img2_shape = img2.shape
     r1 = []
@@ -219,7 +210,7 @@ def plt_histo(img1_path, img2_path):
     plt.tight_layout()
     plt.subplots_adjust(top=0.88, right=0.93)
     plt.subplots_adjust(top=0.88)
-    # Histogram for processed image
+    # Plot Histogram for processed image
     plt.figure(2)
     plt.suptitle('Processed Image')
     subplot(311)
