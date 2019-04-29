@@ -11,9 +11,10 @@ The client has 4 option for processing the image: Histrogram Equalization (defau
 Run the bme547final_gui.py file to activate the GUI.
 
 ## Guite for using GUI:
-1. Browse - click browse to choose an image of folder of images to be processed
-2. On left side of window, click a radio button of the process you want to have performed on your image.
-3. Alternatively one can just click on Process Image and then choose an already stored image to be processed. This only works for images that have been previously uploaded to the database.
-4. Process Image - press this button to process the image(s)
-5. A second window now pops up. It displays the original and processed image.
-6. Display Histograms - pressing this button will display the histrograms for both images.
+1. You MUST enter a user ID and click the 'Enter ID' button
+2. Browse - click browse to choose an image of folder of images to be processed
+3. On left side of window, click a radio button of the process you want to have performed on your image.
+4. Alternatively one can just click on Process Image and then choose an already stored image to be processed. This only works for images that have been previously uploaded to the database.
+5. Process Image - press this button to process the image(s)
+6. A second window now pops up. It displays the original and processed image.
+7. Display Histograms - pressing this button will display the histrograms for both images.
