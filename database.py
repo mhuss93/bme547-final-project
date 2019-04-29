@@ -152,18 +152,19 @@ def process_image(img, method):
     """
     time = datetime.datetime.now()
     if method == 'Hist':
-        return img
+        proc_img = img
     elif method == 'Contrast':
-        return img
+        proc_img = img
     elif method == 'Log':
-        return img
+        proc_img = img
     elif method == 'Reverse':
-        return img
+        proc_img = img
+    else:
+        raise ValueError('Invalid method: {}.'.format(method))
     time_later = datetime.datetime.now()
     total_time = time_later-time
     time_s = total_time.to_float()
-    else:
-        raise ValueError('Invalid method: {}.'.format(method))
+    return time_s, proc_img
 
 
 def save_processed_image(filename, proc_image_str, user_id, proceduretype,
