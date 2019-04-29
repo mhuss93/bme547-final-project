@@ -13,6 +13,17 @@ sum_white = np.sum(white)
     (black, sum_black),
     (white, sum_white), ])
 def test_encode_decode(img, expected):
+    """
+    Tests that a black square can be encoded into string and decoded
+    back into a black square. Similarly with a white square.
+
+    param:
+    img - img array to be encoded and decoded
+    expected - value of the sum of pixels (e.g should be 0 for black)
+
+    retunrs:
+    assert - Passed if funcions operate corrects, Failed if not
+    """
     from encode_decode import imgArray2str
     from encode_decode import str2imgArray
     # turn to string and back to img array

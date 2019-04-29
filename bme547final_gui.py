@@ -29,6 +29,15 @@ g2 = [3, 80, 230, 17]
 
 
 def main_window():
+    """
+    Defines the main window and displays welcome message.
+
+    param:
+    nothing
+
+    returns:
+    nothing
+    """
     root = Tk()
     root.title("Image Processor")
     root.grid_rowconfigure(9, weight=3)
@@ -39,6 +48,16 @@ def main_window():
 
     # Labels, boxes, and buttons for image file selection
     def ask_file():
+        """
+        Pulls up dialog window for user.
+        Prompts user to choose an image file to process.
+
+        param:
+        nothing
+
+        returns:
+        nothing
+        """
         file_adrs = filedialog.askopenfilename()
         open_file_box.insert(0, file_adrs)
         return
@@ -77,6 +96,16 @@ def main_window():
 
     # Button to send image to server for processing and open up next window
     def img_proc():
+        """
+        Creates button for user to press to initialize processing.
+        Displays image path and process to be performed on the image file.
+
+        params:
+        nothing
+
+        returns:
+        nothing
+        """
         proc = proc_choice.get()
         img_path = open_file_box.get()
         print(img_path)
@@ -90,6 +119,18 @@ def main_window():
 
 
 def window2(img1_file, img2_file):
+    """
+    Initializes image viewing and processing window.
+    Original and processed image displayed adjacently.
+    Also displays time to upload, time for processing and image size.
+    Provides options to save file in formats JPG, PNG, TIFF.
+
+    param:
+    nothing
+
+    returns:
+    nothing
+    """
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
@@ -155,6 +196,15 @@ def window2(img1_file, img2_file):
 
     # Choosing a save location for the processed image
     def ask_file():
+        """
+        Prompts user for destination of saved file.
+
+        param:
+        nothing
+
+        returns:
+        nothing
+        """
         save_file_adrs = filedialog.askopenfilename()
         save_file_box.insert(0, save_file_adrs)
         window2.lift()
@@ -162,6 +212,16 @@ def window2(img1_file, img2_file):
 
     # Saving the file
     def save_file():
+        """
+        Saves file to destination, name and file type.
+        Closes the image viewing window if button pressed.
+
+        param:
+        nothing
+
+        returns:
+        nothing
+        """
         img2_obj.save(save_file_adrs)
         pass
     save_file_lbl = ttk.Label(window2, text="Save processed image as:")
@@ -184,6 +244,16 @@ def window2(img1_file, img2_file):
 
 
 def plt_histo(img1_path, img2_path):
+    """
+    Plots histograms of the original and processed images.
+    Displays them to the use on demand.
+
+    param:
+    nothing
+
+    returns:
+    nothing
+    """
     img1 = imread(img1_path)
     img2 = imread(img1_path)
     img1_shape = img1.shape
