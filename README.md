@@ -7,6 +7,9 @@ that allows to choose a picture or several picture of type .JPG, .PNG, or .TIFF 
 This picture is then encoded into a string and can then be uploaded to the server, where it is stored in a database as an encoded string of the RGB array. The database additionally stores the user ID, the time of upload and the duraiton of processing of the image.
 The client has 4 option for processing the image: Histrogram Equalization (default), Contrast Stretching, Log Compression and Reverse Video. The processed image is stored on the server in the same encoded rgb array format, and is also sent back to the user. The user can compare the original and processed image visually in the GUI, as well as plot the color histograms of both images. The dropdown menu can also be used to access and process previous images that have been stored to the database.
 
+## Setting up the program:
+To setup the program on the virtual machine, 
+
 ## Guite for using GUI:
 1. Browse - click browse to choose an image of folder of images to be processed
 2. On left side of window, click a radio button of the process you want to have performed on your image.
