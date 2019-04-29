@@ -13,12 +13,10 @@ def equalize_img(img):
     Take address of image to be processed as img_loc.
     Computes equalization and returns both the input img and equalized img.
 
-    param:
-    img - address to access image to be processed
-
-    returns:
-    img - 2D array of input image
-    equalized - 2D array of equalized image
+    :param img: array of image to be processed
+    :type img: int
+    :returns equalized: array of equalized image
+    :type equalized: int
     """
     equalized = np.asarray(equalize_hist(img)*255, dtype='uint8')
     return equalized[:, :, 0:3]
@@ -28,14 +26,12 @@ def equalize_img(img):
 def contr_stretch_img(img):
     """
     Take address of image to be processed as img_loc.
-    Computes contrast stretch and returns both the input img and stretched img.
+    Computes contrast stretch and returns both the input img and equalized img.
 
-    param:
-    img - address to access image to be processed
-
-    returns:
-    img - 2D array of input image
-    stretch_img - 2D array of stretched image
+    :param img: array of image to be processed
+    :type img: int
+    :returns stretched: array of equalized image
+    :type stretched: int
     """
     stretched = np.asarray(rescale_intensity(img, in_range=(0, 200)),
                            dtype='uint8')
@@ -46,14 +42,12 @@ def contr_stretch_img(img):
 def log_correct_img(img):
     """
     Take address of image to be processed as img_loc.
-    Computes log correction and returns both the input img and corrected img.
+    Computes log_correction and returns both the input img and equalized img.
 
-    param:
-    img - address to access image to be processed
-
-    returns:
-    img - 2D array of input image
-    log_img - 2D array of log corrected image
+    :param img: array of image to be processed
+    :type img: int
+    :returns log_img: array of equalized image
+    :type log_img: int
     """
     log_img = np.asarray(adjust_log(img, 2), dtype='uint8')
     return log_img[:, :, 0:3]
@@ -63,14 +57,12 @@ def log_correct_img(img):
 def reverse_img(img):
     """
     Take address of image to be processed as img_loc.
-    Computes log correction and returns both the input img and corrected img.
+    Computes reverse_img and returns both the input img and equalized img.
 
-    param:
-    img - address to access image to be processed
-
-    returns:
-    img - 2D array of input image
-    reverse_img - 2D array of reversed image
+    :param img: array of image to be processed
+    :type img: int
+    :returns reverse_img: array of equalized image
+    :type reverse_img: int
     """
     reverse_img = np.asarray(util.invert(img), dtype='uint8')
     return reverse_img[:, :, 0:3]
@@ -81,11 +73,10 @@ def RGB(img):
     """
     Takes img as np.array. Seperates rgb values and returns 3 arrays.
 
-    param:
-    img - array of image after performing imread
-
-    returns:
-    r, g, b - arrays of values for each color
+    :param img: array of image after performing imread
+    :type img: int
+    :returns r, g, b: arrays of values for each color
+    :type r, g, b: int
     """
     img_shape = img.shape
     r = []
@@ -104,11 +95,9 @@ def plot_rgb(r, g, b):
     """
     Plots the 3 histograms for colors red, green blue of inputted image array
 
-    param:
-    r, g, b - arrays of values for each color
-
-    returns:
-    nothing - plots the histograms
+    :param r, g, b: arrays of values for each color
+    :type r, g, b: int
+    :returns: nothing - plots the histograms
     """
     plt.figure()
     subplot(311)
