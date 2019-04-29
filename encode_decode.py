@@ -90,7 +90,7 @@ def str2imgArray(img_str):
     :param img_str: image string
     :type img: str
     :returns img_array: rgb array of encoded image
-    :type img_array: int 
+    :type img_array: int
     """
     img_bytes = base64.b64decode(img_str)
     img_buf = io.BytesIO(img_bytes)
