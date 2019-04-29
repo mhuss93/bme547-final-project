@@ -17,42 +17,81 @@ from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
+import requests
+from flask import Flask, jsonify, request
+import os
+
+url = 'http://127.0.0.1:5000'
+
 # Mocks for testing
 img_path = "Zoey.jpg"
 with open(img_path, "rb") as img_file:
     b64_bytes = base64.b64encode(img_file.read())
 b64_string_proc = str(b64_bytes, encoding='utf-8')
 mockDB = {
-          "user_id": "12345"
           }
+multi_file = 0
 
 
 def main_window():
     root = Tk()
     root.title("Image Processor")
-    root.grid_rowconfigure(9, weight=3)
+    root.grid_rowconfigure(10, weight=3)
     # Title message
     welcome_msg = ttk.Label(root, text="Welcome to the image processor!",
                             font=(20))
     welcome_msg.grid(column=0, row=0, columnspan=4, pady=15)
 
+    # Asking for user ID
+    def post_userID():
+        userID = userID_box.get()
+        mockDB["user_id"] = userID
+        requests.post(url + "/api/register_user", json=mockDB)
+        pass
+    userID_lbl = ttk.Label(root, text="Enter User ID:")
+    userID_lbl.grid(column=0, row=1, padx=5, pady=5, sticky=E)
+    userID = StringVar()
+    userID_box = ttk.Entry(root, textvariable=userID)
+    userID_box.config(width=50)
+    userID_box.grid(column=1, row=1, padx=5, pady=5, columnspan=2)
+    userID_btn = ttk.Button(root, text="Enter ID", command=post_userID)
+    userID_btn.grid(column=3, row=1, padx=5, pady=5)
+
+
     # Labels, boxes, and buttons for image file selection
     def ask_file():
         file_adrs = filedialog.askopenfilename()
         open_file_box.insert(0, file_adrs)
-        return
+        pass
     open_file_lbl = ttk.Label(root,
-                              text="Select image file(s) for processing:")
-    open_file_lbl.grid(column=0, row=1, pady=5, padx=10)
+                              text="Select ONE image file for processing:")
+    open_file_lbl.grid(column=0, row=2, pady=5, padx=10)
     file_adrs = StringVar()
     open_file_box = ttk.Entry(root, textvariable=file_adrs)
     open_file_box.config(width=50)
-    open_file_box.grid(column=1, row=1, padx=5, columnspan=2)
+    open_file_box.grid(column=1, row=2, padx=5, columnspan=2)
     browse_btn = ttk.Button(root, text='Browse', command=ask_file)
-    browse_btn.grid(column=3, row=1)
+    browse_btn.grid(column=3, row=2)
+
+    # Opening folder of files
+    def ask_folder():
+        folder_adrs = filedialog.askdirectory()
+        open_folder_box.insert(0, folder_adrs)
+        global multi_file
+        multi_file = 1
+        pass
+    open_folder_lbl = ttk.Label(root,
+                              text="OR select folder of images for processing:")
+    open_folder_lbl.grid(column=0, row=3, pady=5, padx=10)
+    folder_adrs = StringVar()
+    open_folder_box = ttk.Entry(root, textvariable=folder_adrs)
+    open_folder_box.config(width=50)
+    open_folder_box.grid(column=1, row=3, padx=5, columnspan=2)
+    browse_btn2 = ttk.Button(root, text='Browse', command=ask_folder)
+    browse_btn2.grid(column=3, row=3)
     # Frame and radio buttons to choose image processing method
     proc_frm = ttk.Frame(root, borderwidth=1, relief=GROOVE)
-    proc_frm.grid(column=0, row=3, pady=5, ipady=5)
+    proc_frm.grid(column=0, row=5, pady=5, ipady=5)
     proc_lbl = ttk.Label(proc_frm, text="Select image processing method")
     proc_lbl.grid(column=0, row=0, pady=5)
     proc_choice = StringVar()
@@ -81,7 +120,7 @@ def main_window():
         for x in range(len(file_adrs_str)):
             if file_adrs_str[x] == '.':
                 for n in range(len(file_adrs_str)):
-                    if file_adrs_str[x-n-1] != '/':
+                    if file_adrs_str[x-n-1] != '/' and file_adrs_str[x-n-1] != '\\':
                         file_name = file_name + file_adrs_str[x-n-1]
                     else:
                         break
@@ -99,29 +138,61 @@ def main_window():
 
     # Button to send image to server for processing and open up next window
     def img_proc():
-        proc = proc_choice.get()
-        img_path = open_file_box.get()
-        with open(img_path, "rb") as img_file:
-            b64_bytes = base64.b64encode(img_file.read())
-        b64_string = str(b64_bytes, encoding='utf-8')
-        window2(b64_string, b64_string_proc)
-        file_name = get_file_name(img_path)
-        file_type = get_file_type(img_path)
-        mockDB["filename"] = file_name
-        mockDB["extension"] = file_type
-        mockDB["method"] = proc
-        mockDB["image"] = b64_string
-        out_file = open("mockDB.json", "w")
-        json.dump(mockDB, out_file)
-        out_file.close()
+        if multi_file == 0:
+            proc = proc_choice.get()
+            img_path = open_file_box.get()
+            userID = userID_box.get()
+            with open(img_path, "rb") as img_file:
+                b64_bytes = base64.b64encode(img_file.read())
+            b64_string = str(b64_bytes, encoding='utf-8')
+            file_name = get_file_name(img_path)
+            file_type = get_file_type(img_path)
+            # mockDB["user_id"] = userID
+            mockDB["filename"] = file_name
+            mockDB["extension"] = file_type
+            mockDB["method"] = proc
+            mockDB["image"] = b64_string
+            # mockDB["procssed_image"] = b64_string_proc
+            post_adrs = url + "/api/upload_user_image"
+            requests.post(post_adrs, json=mockDB)
+            window2(b64_string_proc)
+        else:
+            files = []
+            folder_path = open_folder_box.get()
+            for r, d, f in os.walk(folder_path):
+                for file in f:
+                    files.append(os.path.join(r, file))
+            for f in files:
+                proc = proc_choice.get()
+                print(type(proc))
+                img_path = f
+                print(type(img_path))
+                userID = userID_box.get()
+                print(type(userID))
+                with open(img_path, "rb") as img_file:
+                    b64_bytes = base64.b64encode(img_file.read())
+                b64_string = str(b64_bytes, encoding='utf-8')
+                file_name = get_file_name(img_path)
+                print(type(file_name))
+                file_type = get_file_type(img_path)
+                print(type(file_type))
+                # mockDB["user_id"] = userID
+                mockDB["filename"] = file_name
+                mockDB["extension"] = file_type
+                mockDB["method"] = proc
+                mockDB["image"] = b64_string
+                print(mockDB)
+                # mockDB["procssed_image"] = b64_string_proc
+                post_adrs = url + "/api/upload_user_image"
+                requests.post(post_adrs, json=mockDB)
+            window2(b64_string_proc)
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
-    proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
+    proc_btn.grid(column=1, row=5, columnspan=3, pady=10)
     root.mainloop()
     return
 
-
-def window2(b64_string, b64_string_proc):
+def window2(b64_string_proc):
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
@@ -133,9 +204,15 @@ def window2(b64_string, b64_string_proc):
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
                   padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    img_bytes = base64.b64decode(b64_string)
-    img_buf = io.BytesIO(img_bytes)
-    img1_array = mpimg.imread(img_buf, format='JPG')
+    def get_up_img():
+        r = requests.post(url + "/api/get_uploaded_image", json=mockDB)
+        img_dict = r.json()
+        b64_string = img_dict['image']
+        img_bytes = base64.b64decode(b64_string)
+        img_buf = io.BytesIO(img_bytes)
+        img1_array = mpimg.imread(img_buf, format='JPG')
+        return img1_array
+    img1_array = get_up_img()
     img1_obj = Image.fromarray(img1_array)
     size = (375, 375)
     img1_obj.thumbnail(size)
@@ -273,6 +350,7 @@ def plt_histo(img1_array, img2_array):
     plt.subplots_adjust(top=0.88, right=0.93)
     plt.show()
     return
+
 
 
 if __name__ == '__main__':
