@@ -108,7 +108,7 @@ def test_save_processed_image():
     time = datetime.datetime.now()
     acceptable_timedelta = datetime.timedelta(seconds=2)
     db.save_processed_image('test_proc1', 'test_proc_str', '1',
-                            'HISTOGRAM_EQUALIZATION', time, 1.0)
+                            'Hist', time, 1.0)
     out = db.ProcessedImage.objects.raw({'filename': 'test_proc1'}).first()
 
     pytest.assume(out.timeToProcess == 1.0)
@@ -123,4 +123,4 @@ def test_save_processed_image_exception():
 
     with pytest.raises(ValidationError):
         db.save_processed_image('test_proc1', 'test_proc_str', '1',
-                                'HISTOGRAM_EQUALIZATION', [1.0], '1.0')
+                                'Hist', [1.0], '1.0')
