@@ -166,13 +166,15 @@ def handler_user_metadata():
         proc_filenames = [img.filename for img in processimages]
         proc_times = [img.timeToProcess for img in processimages]
         processedAt = [img.processedAt for img in processimages]
+        proc_types = [img.procedureType for img in processimages]
 
         return_dict = {
             'filenames': filename,
             'extension': extensions,
             'proc_filenames': proc_filenames,
             'proc_times' = proc_times,
-            'proc_processedAt' = processedAt
+            'proc_processedAt' = processedAt,
+            'proc_types' = proc_types
         }
         return jsonify(return_dict), 200
     except KeyError as e:
