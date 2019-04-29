@@ -15,6 +15,7 @@ def server_on():
 @app.route("/api/upload_user_image", methods=["POST"])
 def handler_upload_user_images():
     import datetime
+    from encode_decode import imgArray2str, str2imgArray
     """
     Uploads a new image for a given user.
     """
@@ -26,11 +27,11 @@ def handler_upload_user_images():
         extension = r['extension']
         image_str = r['image']
         method = r['method']
-        img = decode_image(image_str)
+        img = str2imgArray(image_str)
         if method != 'none':
             time = datetime.datetime.now()
             timetoprocess, proc_img = db.process_image(img, method)
-            proc_img_str = encode_image(proc_img)
+            proc_img_str = imgArray2str(proc_img)
             message_up = db.upload_image(user_id, filename, extension,
                                          image_str)
             message_proc = db.save_processed_image(
@@ -154,14 +155,6 @@ def handler_image_processing_metdata():
     Retrieve data about image processing operations.
     """
     pass
-
-
-def decode_image(imgstr):
-    return imgstr
-
-
-def encode_image(img):
-    return img
 
 
 if __name__ == '__main__':

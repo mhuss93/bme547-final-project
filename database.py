@@ -141,26 +141,27 @@ def get_uploaded_image(user_id, filename, extension):
 
 
 def process_image(img, method):
-    import datetime
-    """TODO: add actual image manipulation methods.
+    """Perform image manipulation.
 
     :param img: Image array.
     :type img: np.array
-    :param method: Image manipulation method to apply.
-    :type method: str
-    :raises ValueError: Error if invalid method is submitted.
-    :return: Processed image.
-    :rtype: np.array
+    :param method: Manipulation method.
+    :type method: ster
+    :raises ValueError: Incorrect image method submitted.
+    :return: Time to perform operation, processed image.
+    :rtype: datetime.timedelta, np.array
     """
+    import img_proc_server as im
+    import datetime
     time = datetime.datetime.now()
     if method == 'Hist':
-        proc_img = img
+        proc_img = im.equalize_hist(img)
     elif method == 'Contrast':
-        proc_img = img
+        proc_img = im.contr_stretch_img(img)
     elif method == 'Log':
-        proc_img = img
+        proc_img = im.log_correct_img(img)
     elif method == 'Reverse':
-        proc_img = img
+        proc_img = im.reverse_img(img)
     else:
         raise ValueError('Invalid method: {}.'.format(method))
     time_later = datetime.datetime.now()
