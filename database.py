@@ -227,7 +227,7 @@ def get_average(user_id, method):
     :param method: Method type.
     :type method: str, list
     :return: Average time.
-    :rtype: [Float
+    :rtype: Float
     """
     import numpy as np
     if not isinstance(method, list):

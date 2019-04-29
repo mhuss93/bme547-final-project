@@ -76,7 +76,8 @@ def handler_register_user():
     except ValidationError as e:
         return jsonify(e.message), 422
     except db.UserExists as e:
-        return jsonify(e), 200
+        out = "User exists."
+        return jsonify(out), 200
     except KeyError as e:
         errormessage = 'Field {} is missing.'.format(e)
         return jsonify(errormessage), 400
@@ -195,7 +196,15 @@ def handler_image_processing_metdata():
     try:
         user_id = r['user_id']
         method = r['method']
-        average = db.get_average(method)
+        average = db.get_average(user_id, method)
+        return_dict = {
+            'method': method,
+            'average': average
+        }
+        return jsonify(return_dict), 200
+    except KeyError as e:
+        errormessage = 'Field {} is missing.'.format(e)
+        return jsonify(errormessage), 400
 
 
 if __name__ == '__main__':
