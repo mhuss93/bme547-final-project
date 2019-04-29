@@ -21,7 +21,7 @@ def equalize_img(img):
     equalized - 2D array of equalized image
     """
     equalized = np.asarray(equalize_hist(img)*255, dtype='uint8')
-    return equalized[:,:,0:3]
+    return equalized[:, :, 0:3]
 
 
 # constrast stretching
@@ -39,7 +39,7 @@ def contr_stretch_img(img):
     """
     stretched = np.asarray(rescale_intensity(img, in_range=(0, 200)),
                            dtype='uint8')
-    return stretched[:,:,0:3]
+    return stretched[:, :, 0:3]
 
 
 # log correction
@@ -56,7 +56,7 @@ def log_correct_img(img):
     log_img - 2D array of log corrected image
     """
     log_img = np.asarray(adjust_log(img, 2), dtype='uint8')
-    return log_img[:,:,0:3]
+    return log_img[:, :, 0:3]
 
 
 # reverse video
@@ -73,7 +73,7 @@ def reverse_img(img):
     reverse_img - 2D array of reversed image
     """
     reverse_img = np.asarray(util.invert(img), dtype='uint8')
-    return reverse_img[:,:,0:3]
+    return reverse_img[:, :, 0:3]
 
 
 # pull out RGB values for histogram
