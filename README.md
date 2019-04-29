@@ -8,7 +8,7 @@ This picture is then encoded into a string and can then be uploaded to the serve
 The client has 4 option for processing the image: Histrogram Equalization (default), Contrast Stretching, Log Compression and Reverse Video. The processed image is stored on the server in the same encoded rgb array format, and is also sent back to the user. The user can compare the original and processed image visually in the GUI, as well as plot the color histograms of both images. The dropdown menu can also be used to access and process previous images that have been stored to the database.
 
 ## Setting up the program:
-To setup the program on the virtual machine, 
+Run the bme547final_gui.py file to activate the GUI.
 
 ## Guite for using GUI:
 1. Browse - click browse to choose an image of folder of images to be processed
