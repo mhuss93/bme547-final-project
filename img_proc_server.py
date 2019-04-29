@@ -25,7 +25,7 @@ def equalize_img(img):
 
 
 # constrast stretching
-def contr_stretch_img(img_loc):
+def contr_stretch_img(img):
     """
     Take address of image to be processed as img_loc.
     Computes contrast stretch and returns both the input img and stretched img.
@@ -37,10 +37,9 @@ def contr_stretch_img(img_loc):
     img - 2D array of input image
     stretch_img - 2D array of stretched image
     """
-    img = imread(img_loc)
-    stretched = np.asarray(rescale_intensity(img, in_range=(0, 220)),
+    stretched = np.asarray(rescale_intensity(img, in_range=(0, 200)),
                            dtype='uint8')
-    return img, stretched
+    return stretched
 
 
 # log correction
@@ -141,16 +140,16 @@ if __name__ == "__main__":
     title('img')
     show()
     # equalize
-    equalized = equalize_img(img)
-    print('equalized')
-    print(equalized)
+    stretched = contr_stretch_img(img)
+    print('stretched')
+    print(stretched)
     # show the image
-    imshow(equalized, cmap=get_cmap('gray'))
-    title('equalized')
+    imshow(stretched, cmap=get_cmap('gray'))
+    title('stretched')
     show()
     # plot histogram for original
     r, g, b = RGB(img)
     plot_rgb(r, g, b)
     # plot histogram for equalized
-    r, g, b = RGB(equalized)
+    r, g, b = RGB(stretched)
     plot_rgb(r, g, b)
