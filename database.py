@@ -234,4 +234,7 @@ def get_average(user_id, method):
         method = [method]
     procs = ProcessedImage.objects.proc(user_id, method)
     t_av = np.mean([proc.timeToProcess for proc in procs])
-    return t_av
+    if np.isnan(t_av):
+        return 'User has not used this operation.'
+    else:
+        return t_av
