@@ -165,7 +165,6 @@ def process_image(img, method):
     import img_proc_server as im
     import datetime
     time = datetime.datetime.now()
-    method = method[-1]
     if method == 'Hist':
         proc_img = im.equalize_hist(img)
     elif method == 'Contrast':
