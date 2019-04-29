@@ -142,10 +142,12 @@ def handler_get_processed_image():
         errormessage = 'Field {} is missing.'.format(e)
         return jsonify(errormessage), 400
     except db.ProcessedImage.DoesNotExist:
-        out = 'Requested Image does not exist: {}, {}.{}'.format(user_id,
-                                                                 filename,
-                                                                 extension,
-                                                                 method)
+        out = 'Requested Image does not exist: {}, {}.{} ({})'.format(
+            user_id,
+            filename,
+            extension,
+            method
+        )
         return jsonify(out), 404
 
 
