@@ -30,8 +30,6 @@ def handler_upload_user_images():
         method = r['method']
         img = str2imgArray(image_str)
         if method != 'none':
-            if not isinstance(method, list):
-                method = [method]
             time = datetime.datetime.now()
             timetoprocess, proc_img = db.process_image(img, method)
             proc_img_str = imgArray2str(proc_img)
