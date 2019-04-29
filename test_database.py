@@ -1,4 +1,5 @@
 import pytest
+from pymodm.errors import ValidationError
 
 
 def test_connect():
@@ -97,3 +98,29 @@ def test_get_uploaded_image():
 
     pytest.assume(out['image'] == image)
     pytest.assume(out['extension'] == extension)
+
+
+def test_save_processed_image():
+    import database as db
+    import datetime
+
+    _test_user('1')
+    time = datetime.datetime.now()
+    acceptable_timedelta = datetime.timedelta(seconds=2)
+    db.save_processed_image('test_proc1', 'test_proc_str', '1',
+                            'Hist', time, 1.0)
+    out = db.ProcessedImage.objects.raw({'filename': 'test_proc1'}).first()
+
+    pytest.assume(out.timeToProcess == 1.0)
+    pytest.assume(out.image == 'test_proc_str')
+    pytest.assume(out.processedAt - time < acceptable_timedelta)
+
+
+def test_save_processed_image_exception():
+    import database as db
+    import datetime
+    time = datetime.datetime.now()
+
+    with pytest.raises(ValidationError):
+        db.save_processed_image('test_proc1', 'test_proc_str', '1',
+                                'Hist', [1.0], '1.0')

@@ -46,10 +46,10 @@ class ProcessedImage(MongoModel):
     filename = fields.CharField()
     image = fields.CharField()
     procedureType = fields.ListField(
-        fields.CharField(choices=('HISTOGRAM_EQUALIZATION',
-                                  'CONTRAST_STRETCHING',
-                                  'LOG_COMPRESSION',
-                                  'REVERSE_VIDEO')))
+        fields.CharField(choices=('Hist',
+                                  'Contrast',
+                                  'Log',
+                                  'REeverse')))
     processedAt = fields.DateTimeField()
     timeToProcess = fields.FloatField()
     user = fields.ReferenceField(User)
@@ -136,3 +136,68 @@ def get_uploaded_image(user_id, filename, extension):
         'uploadedAt': img.uploadedAt,
     }
     return img_dict
+
+
+def process_image(img, method):
+    import datetime
+    """TODO: add actual image manipulation methods.
+
+    :param img: Image array.
+    :type img: np.array
+    :param method: Image manipulation method to apply.
+    :type method: str
+    :raises ValueError: Error if invalid method is submitted.
+    :return: Processed image.
+    :rtype: np.array
+    """
+    time = datetime.datetime.now()
+    if method == 'Hist':
+        proc_img = img
+    elif method == 'Contrast':
+        proc_img = img
+    elif method == 'Log':
+        proc_img = img
+    elif method == 'Reverse':
+        proc_img = img
+    else:
+        raise ValueError('Invalid method: {}.'.format(method))
+    time_later = datetime.datetime.now()
+    total_time = time_later-time
+    time_s = total_time.to_float()
+    return time_s, proc_img
+
+
+def save_processed_image(filename, proc_image_str, user_id, proceduretype,
+                         processedat, timetoprocess, already_processed=False):
+    """Save a processed image to the database.
+
+    :param filename: Base image filename.
+    :type filename: str
+    :param proc_image_str: Base64 encoded processed image.
+    :type proc_image_str: str
+    :param user_id: User ID.
+    :type user_id: str
+    :param proceduretype: Procedure performed.
+    :type proceduretype: str
+    :param processedat: Time image was processed.
+    :type processedat: datetime object
+    :param timetoprocess: Time taken to process image (s)
+    :type timetoprocess: float
+    :param already_processed: If image has alrady been processed, defaults to
+        False.
+    :type already_processed: bool, optional
+    """
+    import datetime
+    time = datetime.datetime.now()
+    img = ProcessedImage(filename=filename,
+                         image=proc_image_str,
+                         user=user_id,
+                         procedureType=[proceduretype],
+                         processedAt=processedat,
+                         timeToProcess=timetoprocess)
+    img.save()
+    out = "Uploaded {} (process:{}) (userID: {}) at {}.".format(filename,
+                                                                proceduretype,
+                                                                user_id,
+                                                                time)
+    return out
