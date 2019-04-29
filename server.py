@@ -121,7 +121,31 @@ def handler_user_metadata():
     """
     Retrieve user data.
     """
-    pass
+    r = request.get_json()
+    try:
+        user_id = r['user_id']
+        images = Image.objects.user(user_id)
+        processimages = ProcessedImages.objects.user(user_id)
+        filenames = [img.filename for img in images]
+        extensions = [img.extension for img in images]
+        proc_filenames = [img.filename for img in processimages]
+        proc_times = [img.timeToProcess for img in processimages]
+        processedAt = [img.processedAt for img in processimages]
+
+        return_dict = {
+            'filenames': filename,
+            'extension': extensions,
+            'proc_filenames': proc_filenames,
+            'proc_times' = proc_times,
+            'proc_processedAt' = processedAt
+        }
+        return jsonify(return_dict), 200
+    except KeyError as e:
+        errormessage = 'Field {} is missing.'.format(e)
+        return jsonify(errormessage), 400
+    except db.ProcessedImage.DoesNotExist:
+        errormessage = 'User {} has no processed images.'.format(user_id)
+        return jsonify(errormessage), 400
 
 
 @app.route("/api/image_processing_metadata", methods=["POST"])
