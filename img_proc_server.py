@@ -43,7 +43,7 @@ def contr_stretch_img(img):
 
 
 # log correction
-def log_correct_img(img_loc):
+def log_correct_img(img):
     """
     Take address of image to be processed as img_loc.
     Computes log correction and returns both the input img and corrected img.
@@ -55,9 +55,8 @@ def log_correct_img(img_loc):
     img - 2D array of input image
     log_img - 2D array of log corrected image
     """
-    img = imread(img_loc)
-    log_img = np.asarray(adjust_log(img, 1.25), dtype='uint8')
-    return img, log_img
+    log_img = np.asarray(adjust_log(img, 2), dtype='uint8')
+    return log_img
 
 
 # reverse video
@@ -140,16 +139,16 @@ if __name__ == "__main__":
     title('img')
     show()
     # equalize
-    stretched = contr_stretch_img(img)
-    print('stretched')
-    print(stretched)
+    logged = log_correct_img(img)
+    print('logged')
+    print(logged)
     # show the image
-    imshow(stretched, cmap=get_cmap('gray'))
-    title('stretched')
+    imshow(logged, cmap=get_cmap('gray'))
+    title('logged')
     show()
     # plot histogram for original
     r, g, b = RGB(img)
     plot_rgb(r, g, b)
     # plot histogram for equalized
-    r, g, b = RGB(stretched)
+    r, g, b = RGB(logged)
     plot_rgb(r, g, b)
