@@ -139,6 +139,7 @@ def get_uploaded_image(user_id, filename, extension):
 
 
 def process_image(img, method):
+    import datetime
     """TODO: add actual image manipulation methods.
 
     :param img: Image array.
@@ -149,6 +150,7 @@ def process_image(img, method):
     :return: Processed image.
     :rtype: np.array
     """
+    time = datetime.datetime.now()
     if method == 'Hist':
         return img
     elif method == 'Contrast':
@@ -157,5 +159,11 @@ def process_image(img, method):
         return img
     elif method == 'Reverse':
         return img
+    time_later = datetime.datetime.now()
+    total_time = time_later-time
+    time_s = total_time.to_float()
     else:
         raise ValueError('Invalid method: {}.'.format(method))
+
+
+def save_processed_image(proc_image_str, user_id, )
