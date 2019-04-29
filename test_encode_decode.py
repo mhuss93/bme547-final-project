@@ -15,10 +15,12 @@ black = np.zeros((100, 100, 3))
 sum_black = np.sum(black)
 white = np.ones((100, 100, 3))*255
 sum_white = np.sum(white)
+
+
 @pytest.mark.parametrize("img, expected", [
     (black, sum_black),
     (white, sum_white), ])
-def test_read_new_patient_id(img, expected):
+def test_encode_decode(img, expected):
     from encode_decode import imgArray2str
     from encode_decode import str2imgArray
     # turn to string and back to img array
