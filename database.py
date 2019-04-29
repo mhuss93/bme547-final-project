@@ -167,6 +167,7 @@ def process_image(img, method):
     time = datetime.datetime.now()
     if method == 'Hist':
         proc_img = im.equalize_hist(img)
+        proc_img*=255
     elif method == 'Contrast':
         proc_img = im.contr_stretch_img(img)
     elif method == 'Log':
