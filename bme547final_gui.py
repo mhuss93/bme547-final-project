@@ -10,6 +10,7 @@ from pathlib import Path
 import io
 import base64
 import io
+import json
 import matplotlib as mpl
 import numpy as np
 from matplotlib import pyplot as plt
@@ -21,6 +22,9 @@ img_path = "Zoey.jpg"
 with open(img_path, "rb") as img_file:
     b64_bytes = base64.b64encode(img_file.read())
 b64_string_proc = str(b64_bytes, encoding='utf-8')
+mockDB = {
+          "user_id": "12345"
+          }
 
 
 def main_window():
@@ -101,8 +105,15 @@ def main_window():
             b64_bytes = base64.b64encode(img_file.read())
         b64_string = str(b64_bytes, encoding='utf-8')
         window2(b64_string, b64_string_proc)
-        get_file_name(img_path)
-        get_file_type(img_path)
+        file_name = get_file_name(img_path)
+        file_type = get_file_type(img_path)
+        mockDB["filename"] = file_name
+        mockDB["extension"] = file_type
+        mockDB["method"] = proc
+        mockDB["image"] = b64_string
+        out_file = open("mockDB.json", "w")
+        json.dump(mockDB, out_file)
+        out_file.close()
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
     proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
