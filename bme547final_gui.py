@@ -286,7 +286,7 @@ def window2():
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
     img2_space.grid(column=0, row=0)
-    
+
     # Refresh button
     def refresh_img():
         global img1_array
