@@ -31,6 +31,16 @@ mockDB = {
 
 
 def main_window():
+    """
+    Opens the main window of the GUI. From this window,
+    the user enters their ID, a file or folder from where
+    they want to upload images, the image processing
+    method they wish to apply, and a button to submit the
+    new images or view images already in the database.
+
+    :params: nothing
+    :returns: nothing
+    """
     root = Tk()
     root.title("Image Processor")
     root.grid_rowconfigure(10, weight=3)
@@ -41,6 +51,13 @@ def main_window():
 
     # Asking for user ID
     def post_userID():
+        """
+        Function tied to button to create a new user or recognize
+        an existing user in the database.
+
+        :params: nothing
+        :returns: nothing
+        """
         global userID
         userID = userID_box.get()
         mockDB["user_id"] = userID
@@ -57,6 +74,15 @@ def main_window():
 
     # Labels, boxes, and buttons for image file selection
     def ask_file():
+        """
+        Clear file adress box and open file dialog window to
+        choose image for upload.
+
+        :params: nothing
+        :returns: nothing
+        """
+        open_file_box.delete(0, END)
+        open_folder_box.delete(0, END)
         file_adrs = filedialog.askopenfilename()
         open_file_box.insert(0, file_adrs)
         pass
@@ -72,6 +98,15 @@ def main_window():
 
     # Opening folder of files
     def ask_folder():
+        """
+        Clear folder adress box and open folder dialog window to
+        choose images for upload.
+
+        :params: nothing
+        :returns: nothing
+        """
+        open_file_box.delete(0, END)
+        open_folder_box.delete(0, END)
         folder_adrs = filedialog.askdirectory()
         open_folder_box.insert(0, folder_adrs)
         global multi_file
@@ -112,6 +147,14 @@ def main_window():
 
     # Function for pulling file name out of file path
     def get_file_name(img_path):
+        """
+        Extract the file name out of the file path.
+
+        :param img_path: file path to image
+        :type img_path: string
+        :return file_name: name of the image file
+        :type file_name: string
+        """
         file_adrs_str = img_path
         file_name = ""
         fas = file_adrs_str
@@ -126,6 +169,14 @@ def main_window():
         return file_name
 
     def get_file_type(img_path):
+        """
+        Extract the file type out of the file path.
+
+        :param img_path: file path to image
+        :type img_path: string
+        :return file_name: file type of the image file
+        :type file_name: string
+        """
         file_adrs_str = img_path
         file_type = ""
         for x in range(len(file_adrs_str)):
@@ -136,6 +187,14 @@ def main_window():
 
     # Button to send image to server for processing and open up next window
     def img_proc():
+        """
+        Saving image information into a local dictionary, encoding
+        the image file, and sending both to the server for
+        processing. The next window is then opened.
+
+        :params: nothing
+        :returns: nothing
+        """
         if multi_file == 0:
             proc = proc_choice.get()
             img_path = open_file_box.get()
@@ -168,7 +227,6 @@ def main_window():
                 mockDB["filename"] = file_name
                 mockDB["extension"] = file_type
                 mockDB["method"] = proc
-                print(mockDB["filename"])
                 mockDB["original_image"] = b64_string
                 post_adrs = url + "/api/upload_user_image"
                 requests.post(post_adrs, json=mockDB)
@@ -185,6 +243,15 @@ def main_window():
 
 
 def window2():
+    """
+    Window showing the original and processed images. There is a
+    drop down menu to display other pairs of image files, and
+    metadata is shown for each pair. The save file type is selected
+    and the processed image file can be saved.
+
+    :params: nothing
+    :returns: nothing
+    """
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # In-window global variables
@@ -211,17 +278,21 @@ def window2():
     drop_menu.grid(column=4, row=0, pady=5, padx=10)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
-                         width=250, height=70)
+                         width=250, height=95)
     data_frm.grid(column=5, row=2, columnspan=2, pady=5, padx=5, sticky=N)
     data_frm.grid_propagate(0)
     time = StringVar()
     time_proc = StringVar()
+    size_var = StringVar()
     time.set("Time of upload: ")
     time_proc.set("Time for processing: ")
+    size_var.set("Image Size (pixels): ")
     timestamp_lbl = ttk.Label(data_frm, textvariable=time)
     timestamp_lbl.grid(column=0, row=0, pady=5, sticky=W)
     proctime_lbl = ttk.Label(data_frm, textvariable=time_proc)
     proctime_lbl.grid(column=0, row=1, pady=5, sticky=W)
+    size_lbl = ttk.Label(data_frm, textvariable=size_var)
+    size_lbl.grid(column=0, row=2, pady=5, sticky=W)
     # Frame and Label for Original Image
     img1_lbl = ttk.Label(window2, text="Original Image",
                          font='Arial 10 bold')
@@ -241,6 +312,16 @@ def window2():
     img2_frm.grid_propagate(0)
 
     def get_up_img(dic):
+        """
+        Requests an already uploaded image from the server and decodes
+        this image for use in the gui.
+
+        :param dic: A dictionary of the file the user wants to get
+        from the server
+        :type dic: Dictionary (JSON format)
+        :return img1_array: Array of RGB values for the original image
+        :type img1_array: Array
+        """
         dic_short = {
                      "user_id": userID,
                      "filename": dic['filename'],
@@ -264,6 +345,16 @@ def window2():
     img1_space.grid(column=0, row=0)
 
     def get_proc_img(dic):
+        """
+        Requests the processed image from the server and decodes
+        this image for use in the gui.
+
+        :param dic: A dictionary of the file the user wants to get
+        from the server
+        :type dic: Dictionary (JSON format)
+        :return img2_array: Array of RGB values for the processed image
+        :type img2_array: Array
+        """
         dic_short = {
                      "user_id": userID,
                      "filename": dic['filename'],
@@ -289,6 +380,13 @@ def window2():
 
     # Refresh button
     def refresh_img():
+        """
+        Replaces the image and metadata displays in the GUI with
+        the newly selected files.
+
+        :params: none
+        :returns: none
+        """
         global img1_array
         global img2_array
         for i in range(len(file_names)):
@@ -323,12 +421,13 @@ def window2():
         img2 = ImageTk.PhotoImage(img2_obj)
         img2_space.configure(image=img2)
         img2_space.image = img2
+        size_val = np.shape(img2_array)
+        size_x = size_val[0]
+        size_y = size_val[1]
         time.set("Time for Processing: " + str(proc_time))
         time_proc.set("Time of Upload: " + str(procAt))
-        # proctime_lbl.configure(text="Time for Processing: " + str(proc_time))
-        # proctime_lbl.text = "Time for Processing: " + str(proc_time)
-        # timestamp_lbl.configure(text="Time of Upload: " + str(procAt))
-        # timestamp_lbl.text = "Time of Upload: " + str(procAt)
+        size_var.set("Image Size (pixels): " + str(size_x) 
+                     + " x " + str(size_y))
         pass
     refresh_img()
     refresh_btn = ttk.Button(window2, text='Refresh Image',
@@ -358,6 +457,12 @@ def window2():
 
     # Choosing a save location for the processed image
     def ask_file():
+        """
+        Opens file dialog to get file save location from the user.
+
+        :params: none
+        :returns: none
+        """
         save_file_adrs = filedialog.asksaveasfilename()
         save_file_box.insert(0, save_file_adrs)
         window2.lift()
@@ -365,6 +470,12 @@ def window2():
 
     # Saving the file
     def save_file():
+        """
+        Saves the image file on the computer at the specified location.
+
+        :params: none
+        :returns: none
+        """
         file_path = save_file_adrs.get() + file_type.get()
         img2_obj.save(file_path)
         pass
@@ -388,6 +499,15 @@ def window2():
 
 
 def plt_histo(img1_array, img2_array):
+    """
+    Makes matplot lib histograms of the RGB values of the original
+    and processed images.
+
+    :param img1_array: Array of RGB values for original image
+    :type img1_array: Array
+    :param img2_array: Array of RGB values for processed image
+    :type img2_array: Array
+    """
     # Generate arrays of color values from image files
     img1_shape = img1_array.shape
     img2_shape = img2_array.shape
