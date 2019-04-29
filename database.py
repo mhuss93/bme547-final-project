@@ -177,7 +177,7 @@ def process_image(img, method):
         raise ValueError('Invalid method: {}.'.format(method))
     time_later = datetime.datetime.now()
     total_time = time_later-time
-    time_s = total_time.to_float()
+    time_s = total_time.total_seconds()
     return time_s, proc_img
 
 
