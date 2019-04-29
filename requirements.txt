@@ -8,3 +8,4 @@ python-dateutil
 sendgrid==5.6.0
 Pillow
 opencv-python
+matplotlib
