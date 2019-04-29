@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import imread, imshow, show, subplot, title
-from matplotlib.pyplot import get_cmap, hist
+from matplotlib.pyplot import get_cmap, hist, imsave
 from skimage.exposure import equalize_hist, rescale_intensity, adjust_log
 from skimage import util
 
@@ -14,14 +14,14 @@ def equalize_img(img):
     Computes equalization and returns both the input img and equalized img.
 
     param:
-    img_loc - address to access image to be processed
+    img - address to access image to be processed
 
     returns:
     img - 2D array of input image
-    eq - 2D array of equalized image
+    equalized - 2D array of equalized image
     """
     equalized = np.asarray(equalize_hist(img)*255, dtype='uint8')
-    return equalized
+    return equalized[:,:,0:3]
 
 
 # constrast stretching
@@ -31,7 +31,7 @@ def contr_stretch_img(img):
     Computes contrast stretch and returns both the input img and stretched img.
 
     param:
-    img_loc - address to access image to be processed
+    img - address to access image to be processed
 
     returns:
     img - 2D array of input image
@@ -39,7 +39,7 @@ def contr_stretch_img(img):
     """
     stretched = np.asarray(rescale_intensity(img, in_range=(0, 200)),
                            dtype='uint8')
-    return stretched
+    return stretched[:,:,0:3]
 
 
 # log correction
@@ -49,32 +49,31 @@ def log_correct_img(img):
     Computes log correction and returns both the input img and corrected img.
 
     param:
-    img_loc - address to access image to be processed
+    img - address to access image to be processed
 
     returns:
     img - 2D array of input image
     log_img - 2D array of log corrected image
     """
     log_img = np.asarray(adjust_log(img, 2), dtype='uint8')
-    return log_img
+    return log_img[:,:,0:3]
 
 
 # reverse video
-def reverse_img(img_loc):
+def reverse_img(img):
     """
     Take address of image to be processed as img_loc.
     Computes log correction and returns both the input img and corrected img.
 
     param:
-    img_loc - address to access image to be processed
+    img - address to access image to be processed
 
     returns:
     img - 2D array of input image
-    log_img - 2D array of log corrected image
+    reverse_img - 2D array of reversed image
     """
-    img = imread(img_loc)
     reverse_img = np.asarray(util.invert(img), dtype='uint8')
-    return img, reverse_img
+    return reverse_img[:,:,0:3]
 
 
 # pull out RGB values for histogram
@@ -132,23 +131,19 @@ if __name__ == "__main__":
     # covert string to img array
     from encode_decode import str2imgArray
     img = str2imgArray(img_str)
-    print('img')
-    print(img)
     # show the image
     imshow(img, cmap=get_cmap('gray'))
     title('img')
     show()
-    # equalize
-    logged = log_correct_img(img)
-    print('logged')
-    print(logged)
-    # show the image
-    imshow(logged, cmap=get_cmap('gray'))
-    title('logged')
+    # reverse
+    reverse = reverse_img(img)
+    # show the reversed image
+    imshow(reverse, cmap=get_cmap('gray'))
+    title('reverse')
     show()
     # plot histogram for original
     r, g, b = RGB(img)
     plot_rgb(r, g, b)
-    # plot histogram for equalized
-    r, g, b = RGB(logged)
+    # plot histogram for reversed
+    r, g, b = RGB(reverse)
     plot_rgb(r, g, b)
