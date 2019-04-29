@@ -8,6 +8,7 @@ import struct
 import io
 import cv2
 
+
 # Encode image file to str
 def imgFile2str(img_loc):
     """
