@@ -17,11 +17,15 @@ import matplotlib.image as mpimg
 from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
 
-# Mock for encoded processed image
+# Mocks for testing
 img_path = "Zoey.jpg"
 with open(img_path, "rb") as img_file:
     b64_bytes = base64.b64encode(img_file.read())
 b64_string_proc = str(b64_bytes, encoding='utf-8')
+
+mockDB_entry = {
+                "user_id" = "12345"
+                }
 
 
 def main_window():
@@ -70,6 +74,21 @@ def main_window():
                              variable=proc_choice,
                              value='Reverse')
     proc_4.grid(column=0, row=4, sticky=W, padx=20)
+
+    # Function for pulling file name out of file path
+    def get_file_name():
+        file_adrs_str = open_file_box.get()
+        file_name = ""
+        for x in range(len(file_adrs_str)):
+            if file_adrs_str[x] == '.':
+                for n in range(len(file_adrs_str)):
+                    if file_adrs_str[x-n-1] != '\\':
+                        file_name = file_name + file_adrs_str[x-n-1]
+                    else:
+                        break
+        file_name = file_name[::-1]
+        print(file_name)
+        return file_name
 
     # Button to send image to server for processing and open up next window
     def img_proc():
