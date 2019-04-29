@@ -25,20 +25,9 @@ import os
 url = 'http://127.0.0.1:5000'
 multi_file = 0
 userID = ''
-
-# Mocks for testing
-img_path = "Zoey.jpg"
-with open(img_path, "rb") as img_file:
-    b64_bytes = base64.b64encode(img_file.read())
-b64_string_proc = str(b64_bytes, encoding='utf-8')
 mockDB = {
 
           }
-mockMeta = {
-            "user_id": "kb",
-            "filename": ["MentorLunchReceipt_3_27_2019", "MiddleSupport"],
-            "extension": ["jpg", "jpg"],
-            }
 
 
 def main_window():
@@ -158,11 +147,10 @@ def main_window():
             mockDB["filename"] = file_name
             mockDB["extension"] = file_type
             mockDB["method"] = proc
-            mockDB["image"] = b64_string
-            # mockDB["procssed_image"] = b64_string_proc
+            mockDB["original_image"] = b64_string
             post_adrs = url + "/api/upload_user_image"
             requests.post(post_adrs, json=mockDB)
-            window2(b64_string_proc)
+            window2()
         else:
             files = []
             folder_path = open_folder_box.get()
@@ -180,26 +168,40 @@ def main_window():
                 mockDB["filename"] = file_name
                 mockDB["extension"] = file_type
                 mockDB["method"] = proc
-                mockDB["image"] = b64_string
-                # mockDB["procssed_image"] = b64_string_proc
+                print(mockDB["filename"])
+                mockDB["original_image"] = b64_string
                 post_adrs = url + "/api/upload_user_image"
                 requests.post(post_adrs, json=mockDB)
-            window2(b64_string_proc)
+            window2()
+            pass
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
     proc_btn.grid(column=1, row=5, columnspan=3, pady=10)
+    look_ahead = ttk.Button(root, text="OR see previously uploaded images",
+                            command=window2)
+    look_ahead.grid(column=1, row=6, columnspan=3, pady=5, sticky=N)
     root.mainloop()
     return
 
 
-def window2(b64_string_proc):
+def window2():
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # In-window global variables
     img1_array = np.empty([2, 2])
-    # List of file names and extensions
-    file_names = mockMeta["filename"]
-    extensions = mockMeta["extension"]
+    img2_array = np.empty([2, 2])
+    # Get of file names and extensions
+    userID_dic = {
+                  "user_id": userID
+                  }
+    post_adrs = url + "/api/user_metadata"
+    r = requests.post(post_adrs, json=userID_dic)
+    meta_dic = r.json()
+    file_names = meta_dic["filenames"]
+    extensions = meta_dic["extension"]
+    methods = meta_dic["proc_types"]
+    proc_times = meta_dic["proc_times"]
+    processedAt = meta_dic["proc_procssedAt"]
     # Drop down menu to select file to view
     drop_lbl = ttk.Label(window2, text='Select Image to View:')
     drop_lbl.grid(column=2, row=0, columnspan=2, pady=5, sticky=E)
@@ -207,72 +209,6 @@ def window2(b64_string_proc):
     variable.set(file_names[0])
     drop_menu = OptionMenu(window2, variable, *file_names)
     drop_menu.grid(column=4, row=0, pady=5, padx=10)
-    # Frame and Label for Original Image
-    img1_lbl = ttk.Label(window2, text="Original Image",
-                         font='Arial 10 bold')
-    img1_lbl.grid(column=0, row=1, columnspan=4, pady=5)
-    img1_frm = ttk.Frame(window2, borderwidth=1,
-                         width=380, height=380)
-    img1_frm.grid(column=0, row=2, columnspan=4, rowspan=2, pady=5,
-                  padx=5, ipady=5)
-    img1_frm.grid_propagate(0)
-
-    def get_up_img(dic):
-        r = requests.post(url + "/api/get_uploaded_image",
-                          json=dic)
-        img_dict = r.json()
-        b64_string = img_dict['image']
-        img_bytes = base64.b64decode(b64_string)
-        img_buf = io.BytesIO(img_bytes)
-        img1_array = mpimg.imread(img_buf, format=dic['extension'])
-        return img1_array
-    img1_array = get_up_img(mockDB)
-    img1_obj = Image.fromarray(img1_array)
-    size = (375, 375)
-    img1_obj.thumbnail(size)
-    img1 = ImageTk.PhotoImage(img1_obj)
-    img1_space = ttk.Label(img1_frm, image=img1)
-    img1_space.grid(column=0, row=0)
-
-    # Refresh button
-    def refresh_img():
-        for i in range(len(file_names)):
-            if file_names[i] == variable.get():
-                file_name = file_names[i]
-                extension = extensions[i]
-        dic = {
-               "user_id": userID,
-               "filename": file_name,
-               "extension": extension,
-                }
-        img1_array = get_up_img(dic)
-        img1_obj = Image.fromarray(img1_array)
-        size = (375, 375)
-        img1_obj.thumbnail(size)
-        img1 = ImageTk.PhotoImage(img1_obj)
-        img1_space.configure(image=img1)
-        img1_space.image = img1
-        pass
-    refresh_btn = ttk.Button(window2, text='Refresh Image',
-                             command=refresh_img)
-    refresh_btn.grid(column=5, row=0, pady=5, sticky=W)
-    # Frame and Label for Processed Image
-    img2_lbl = ttk.Label(window2, text="Processed Image",
-                         font='Arial 10 bold')
-    img2_lbl.grid(column=4, row=1, pady=5)
-    img2_frm = ttk.Frame(window2, borderwidth=1,
-                         width=380, height=380)
-    img2_frm.grid(column=4, row=2, rowspan=2, pady=5, padx=5, ipady=5)
-    img2_frm.grid_propagate(0)
-    img_bytes = base64.b64decode(b64_string_proc)
-    img_buf = io.BytesIO(img_bytes)
-    img2_array = mpimg.imread(img_buf, format='JPG')
-    img2_obj = Image.fromarray(img2_array)
-    size = (375, 375)
-    img2_obj.thumbnail(size)
-    img2 = ImageTk.PhotoImage(img2_obj)
-    img2_space = ttk.Label(img2_frm, image=img2)
-    img2_space.grid(column=0, row=0)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
                          width=200, height=95)
@@ -282,8 +218,115 @@ def window2(b64_string_proc):
     timestamp_lbl.grid(column=0, row=0, pady=5, sticky=W)
     proctime_lbl = ttk.Label(data_frm, text="Time for Processing:")
     proctime_lbl.grid(column=0, row=1, pady=5, sticky=W)
-    size_lbl = ttk.Label(data_frm, text="Image Size:")
-    size_lbl.grid(column=0, row=2, pady=5, sticky=W)
+    # Frame and Label for Original Image
+    img1_lbl = ttk.Label(window2, text="Original Image",
+                         font='Arial 10 bold')
+    img1_lbl.grid(column=0, row=1, columnspan=4, pady=5)
+    img1_frm = ttk.Frame(window2, borderwidth=1,
+                         width=380, height=380)
+    img1_frm.grid(column=0, row=2, columnspan=4, rowspan=2, pady=5,
+                  padx=5, ipady=5)
+    img1_frm.grid_propagate(0)
+    # Frame and Label for Processed Image
+    img2_lbl = ttk.Label(window2, text="Processed Image",
+                         font='Arial 10 bold')
+    img2_lbl.grid(column=4, row=1, pady=5)
+    img2_frm = ttk.Frame(window2, borderwidth=1,
+                         width=380, height=380)
+    img2_frm.grid(column=4, row=2, rowspan=2, pady=5, padx=5, ipady=5)
+    img2_frm.grid_propagate(0)
+
+    def get_up_img(dic):
+        dic_short = {
+                     "user_id": userID,
+                     "filename": dic['filename'],
+                     "extension": dic['extension']
+                     }
+        r = requests.post(url + "/api/get_uploaded_image",
+                          json=dic_short)
+        img_dict = r.json()
+        b64_string = img_dict['original_image']
+        img_bytes = base64.b64decode(b64_string)
+        img_buf = io.BytesIO(img_bytes)
+        img1_array = mpimg.imread(img_buf,
+                                  format=dic_short['extension'])
+        return img1_array
+    img1_array = get_up_img(mockDB)
+    img1_obj = Image.fromarray(img1_array)
+    size = (375, 375)
+    img1_obj.thumbnail(size)
+    img1 = ImageTk.PhotoImage(img1_obj)
+    img1_space = ttk.Label(img1_frm, image=img1)
+    img1_space.grid(column=0, row=0)
+
+    def get_proc_img(dic):
+        dic_short = {
+                     "user_id": userID,
+                     "filename": dic['filename'],
+                     "extension": dic['extension'],
+                     "method": dic['method']
+                     }
+        r = requests.post(url + "/api/get_processed_image",
+                          json=dic_short)
+        img_dict = r.json()
+        b64_string = img_dict['processed_image']
+        img_bytes = base64.b64decode(b64_string)
+        img_buf = io.BytesIO(img_bytes)
+        img2_array = mpimg.imread(img_buf,
+                                  format=dic_short['extension'])
+        return img2_array
+    img2_array = get_proc_img(mockDB)
+    img2_obj = Image.fromarray(img2_array)
+    size = (375, 375)
+    img2_obj.thumbnail(size)
+    img2 = ImageTk.PhotoImage(img2_obj)
+    img2_space = ttk.Label(img2_frm, image=img2)
+    img2_space.grid(column=0, row=0)
+
+    # Refresh button
+    def refresh_img():
+        global img1_array
+        global img2_array
+        for i in range(len(file_names)):
+            if file_names[i] == variable.get():
+                file_name = file_names[i]
+                extension = extensions[i]
+                method = methods[i]
+                proc_time = proc_times[i]
+                procAt = processedAt[i]
+        dic1 = {
+               "user_id": userID,
+               "filename": file_name,
+               "extension": extension,
+                }
+        dic2 = {
+                "user_id": userID,
+                "filename": file_name,
+                "extension": extension,
+                "method": method
+                }
+        img1_array = get_up_img(dic1)
+        img1_obj = Image.fromarray(img1_array)
+        size = (375, 375)
+        img1_obj.thumbnail(size)
+        img1 = ImageTk.PhotoImage(img1_obj)
+        img1_space.configure(image=img1)
+        img1_space.image = img1
+        img2_array = get_proc_img(dic2)
+        img2_obj = Image.fromarray(img2_array)
+        size = (375, 375)
+        img2_obj.thumbnail(size)
+        img2 = ImageTk.PhotoImage(img2_obj)
+        img2_space.configure(image=img2)
+        img2_space.image  = img2
+        proctime_lbl.configure(text="Time for Processing: "+proc_time)
+        proctime_lbl.text = "Time for Processing: "+proc_time
+        timestamp_lbl.configure(text="Time of Upload: "+procAt)
+        timestamp_lbl.text = "Time of Upload: "+procAt
+        pass
+    refresh_btn = ttk.Button(window2, text='Refresh Image',
+                             command=refresh_img)
+    refresh_btn.grid(column=5, row=0, pady=5, sticky=W)
     # Button to open histogram window
     window2.grid_rowconfigure(3, weight=1)
     histo_btn = ttk.Button(window2,
