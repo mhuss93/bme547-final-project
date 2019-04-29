@@ -11,7 +11,5 @@ The client has 4 option for processing the image: Histrogram Equalization (defau
 1. Browse - click browse to choose an image of folder of images to be processed
 2. On left side of window, click a radio button of the process you want to have performed on your image.
 3. Process Image - press this button to process the image(s)
-
--> A second window now pops up. It displays the original and processed image.
-
-4. Display Histograms - pressing this button will display the histrograms for both images.
+4. A second window now pops up. It displays the original and processed image.
+5. Display Histograms - pressing this button will display the histrograms for both images.
