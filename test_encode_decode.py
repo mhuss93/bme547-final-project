@@ -1,12 +1,5 @@
 import pytest
-import matplotlib.image as mpimg
 import numpy as np
-from matplotlib.pyplot import imread, imshow, show, subplot, title
-from matplotlib.pyplot import get_cmap, hist
-import base64
-import struct
-import io
-import cv2
 
 
 # test the encode and decode funcs
@@ -31,9 +24,3 @@ def test_encode_decode(img, expected):
     imgback = temp
     summa = np.sum(img)
     assert summa == expected
-
-
-if __name__ == "__main__":
-    black = np.zeros((100, 100, 3))
-    plt.imsave('black.png', black)
-    print(np.sum(black))
