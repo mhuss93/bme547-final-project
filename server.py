@@ -118,6 +118,7 @@ def handler_get_processed_image():
     """
     Retrieve a processed image from teh database.
     """
+    r = request.get_json()
     try:
         user_id = r['user_id']
         filename = r['filename']
@@ -190,7 +191,11 @@ def handler_image_processing_metdata():
     """
     Retrieve data about image processing operations.
     """
-    pass
+    r = request.get_json()
+    try:
+        user_id = r['user_id']
+        method = r['method']
+        average = db.get_average(method)
 
 
 if __name__ == '__main__':
