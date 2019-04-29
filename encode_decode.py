@@ -15,11 +15,10 @@ def imgFile2str(img_loc):
     Takes in address of image file to be encoded into str.
     Encodes the image into a string.
 
-    param:
-    img_loc - location of address
-
-    returns:
-    img_str - string of encoded image
+    :param img_loc: location of address
+    :type img_loc: str
+    :return img_str: string of encoded image
+    :type imgStr: str
     """
     with open(img_loc, "rb") as imageFile:
         img_str = base64.b64encode(imageFile.read())
@@ -33,12 +32,9 @@ def str2imgFile(img_loc, img_str):
     Takes in name of encoded image to save as file.
     Decodes the string and saves the image.
 
-    param:
-    img_loc - location of address
-    img_str - the string of the image
-
-    returns:
-    nothing
+    :param img_loc: location of address
+    :type img_loc: str
+    :returns: nothing
     """
     with open(img_loc, "wb") as fh:
         decstr = base64.b64decode(img_str)
@@ -53,11 +49,10 @@ def imgArray2str(img):
     Takes in image rbg array to be encoded into str.
     Encodes the array into a string.
 
-    param:
-    img - image rgb array
-
-    returns:
-    img_str - string of encoded image
+    :param img: array of image rgb values
+    :type img: int
+    :returns img_str: string of encoded image
+    :type img_str: str
     """
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
@@ -72,11 +67,10 @@ def imgArray2str2(img):
     Takes in image rbg array to be encoded into str.
     Encodes the array into a string.
 
-    param:
-    img - image rgb array
-
-    returns:
-    img_str - string of encoded image
+    :param img: array of image rgb values
+    :type img: int
+    :returns img_str: string of encoded image
+    :type img_str: str
     """
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
@@ -91,11 +85,10 @@ def str2imgArray(img_str):
     Takes in name of encoded image to save.
     Decodes the string and saves the image.
 
-    param:
-    img_loc - location of address
-
-    returns:
-    img - array of decoded image
+    :param img_loc: location of address
+    :type img_loc: str
+    :return img: array of decoded image rgb values
+    :type img: int
     """
     img_bytes = base64.b64decode(img_str)
     img_buf = io.BytesIO(img_bytes)
