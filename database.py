@@ -165,6 +165,7 @@ def process_image(img, method):
     import img_proc_server as im
     import datetime
     time = datetime.datetime.now()
+    method = method[-1]
     if method == 'Hist':
         proc_img = im.equalize_hist(img)
     elif method == 'Contrast':
@@ -204,10 +205,12 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
     """
     import datetime
     time = datetime.datetime.now()
+    if not isinstance(proceduretype, list):
+        proceduretype = [proceduretype]
     img = ProcessedImage(filename=filename,
                          image=proc_image_str,
                          user=user_id,
-                         procedureType=[proceduretype],
+                         procedureType=proceduretype,
                          processedAt=processedat,
                          timeToProcess=timetoprocess,
                          extension=extension)

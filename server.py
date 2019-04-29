@@ -30,6 +30,8 @@ def handler_upload_user_images():
         method = r['method']
         img = str2imgArray(image_str)
         if method != 'none':
+            if not isinstance(method, list):
+                method = [method]
             time = datetime.datetime.now()
             timetoprocess, proc_img = db.process_image(img, method)
             proc_img_str = imgArray2str(proc_img)
@@ -172,12 +174,12 @@ def handler_user_metadata():
         proc_types = [img.procedureType for img in processimages]
 
         return_dict = {
-            'filenames': filename,
+            'filenames': filenames,
             'extension': extensions,
             'proc_filenames': proc_filenames,
-            'proc_times' = proc_times,
-            'proc_processedAt' = processedAt,
-            'proc_types' = proc_types
+            'proc_times': proc_times,
+            'proc_processedAt': processedAt,
+            'proc_types': proc_types
         }
         return jsonify(return_dict), 200
     except KeyError as e:
