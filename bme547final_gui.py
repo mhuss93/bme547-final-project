@@ -17,6 +17,12 @@ import matplotlib.image as mpimg
 from matplotlib.pyplot import imread, imshow, show, subplot, title
 from matplotlib.pyplot import get_cmap, hist
 
+# Mock for encoded processed image
+img_path = "Zoey.jpg"
+with open(img_path, "rb") as img_file:
+    b64_bytes = base64.b64encode(img_file.read())
+b64_string_proc = str(b64_bytes, encoding='utf-8')
+
 
 def main_window():
     root = Tk()
@@ -69,8 +75,10 @@ def main_window():
     def img_proc():
         proc = proc_choice.get()
         img_path = open_file_box.get()
-        print(proc)
-        window2(img_path, "Zoey.jpg")
+        with open(img_path, "rb") as img_file:
+            b64_bytes = base64.b64encode(img_file.read())
+        b64_string = str(b64_bytes, encoding='utf-8')
+        window2(b64_string, b64_string_proc)
     proc_btn = ttk.Button(root, text="Process my image(s)",
                           command=img_proc)
     proc_btn.grid(column=1, row=3, columnspan=3, pady=10)
@@ -78,19 +86,22 @@ def main_window():
     return
 
 
-def window2(img1_file, img2_file):
+def window2(b64_string, b64_string_proc):
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # Frame and Label for Original Image
     img1_lbl = ttk.Label(window2, text="Original Image",
                          font='Arial 10 bold')
     img1_lbl.grid(column=0, row=0, columnspan=4, pady=5)
-    img1_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
+    img1_frm = ttk.Frame(window2, borderwidth=1,
                          width=380, height=380)
     img1_frm.grid(column=0, row=1, columnspan=4, rowspan=2, pady=5,
                   padx=5, ipady=5)
     img1_frm.grid_propagate(0)
-    img1_obj = Image.open(img1_file)
+    img_bytes = base64.b64decode(b64_string)
+    img_buf = io.BytesIO(img_bytes)
+    img1_array = mpimg.imread(img_buf, format='JPG')
+    img1_obj = Image.fromarray(img1_array)
     size = (375, 375)
     img1_obj.thumbnail(size)
     img1 = ImageTk.PhotoImage(img1_obj)
@@ -100,11 +111,14 @@ def window2(img1_file, img2_file):
     img2_lbl = ttk.Label(window2, text="Processed Image",
                          font='Arial 10 bold')
     img2_lbl.grid(column=4, row=0, pady=5)
-    img2_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
+    img2_frm = ttk.Frame(window2, borderwidth=1,
                          width=380, height=380)
     img2_frm.grid(column=4, row=1, rowspan=2, pady=5, padx=5, ipady=5)
     img2_frm.grid_propagate(0)
-    img2_obj = Image.open(img2_file)
+    img_bytes = base64.b64decode(b64_string_proc)
+    img_buf = io.BytesIO(img_bytes)
+    img2_array = mpimg.imread(img_buf, format='JPG')
+    img2_obj = Image.fromarray(img2_array)
     img2_obj.thumbnail(size)
     img2 = ImageTk.PhotoImage(img2_obj)
     img2_space = ttk.Label(img2_frm, image=img2)
@@ -124,7 +138,7 @@ def window2(img1_file, img2_file):
     window2.grid_rowconfigure(2, weight=1)
     histo_btn = ttk.Button(window2,
                            text='Show Color Histograms',
-                           command=lambda: plt_histo(img1_file, img2_file))
+                           command=lambda: plt_histo(img1_array, img2_array))
     histo_btn.grid(column=5, row=2, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -152,7 +166,7 @@ def window2(img1_file, img2_file):
     # Saving the file
     def save_file():
         file_path = save_file_adrs.get() + file_type.get()
-        img2_obj.save(file_path)
+        img1_obj.save(file_path)
         pass
     save_file_lbl = ttk.Label(window2, text="Save processed image as:")
     save_file_lbl.grid(column=0, row=4, sticky=E, pady=5, padx=5)
@@ -173,12 +187,10 @@ def window2(img1_file, img2_file):
     return
 
 
-def plt_histo(img1_file, img2_file):
+def plt_histo(img1_array, img2_array):
     # Generate arrays of color values from image files
-    img1 = imread(img1_file)
-    img2 = imread(img2_file)
-    img1_shape = img1.shape
-    img2_shape = img2.shape
+    img1_shape = img1_array.shape
+    img2_shape = img2_array.shape
     r1 = []
     g1 = []
     b1 = []
@@ -187,14 +199,14 @@ def plt_histo(img1_file, img2_file):
     b2 = []
     for i in range(img1_shape[0]):
         for j in range(img1_shape[1]):
-            r1.append(img1[i, j, 0])
-            g1.append(img1[i, j, 1])
-            b1.append(img1[i, j, 2])
+            r1.append(img1_array[i, j, 0])
+            g1.append(img1_array[i, j, 1])
+            b1.append(img1_array[i, j, 2])
     for i in range(img2_shape[0]):
         for j in range(img2_shape[1]):
-            r2.append(img2[i, j, 0])
-            g2.append(img2[i, j, 1])
-            b2.append(img2[i, j, 2])
+            r2.append(img2_array[i, j, 0])
+            g2.append(img2_array[i, j, 1])
+            b2.append(img2_array[i, j, 2])
     # Plot Histogram for original image
     plt.figure(1)
     plt.suptitle('Original Image')
