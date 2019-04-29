@@ -41,6 +41,7 @@ def handler_upload_user_images():
                 method,
                 time,
                 timetoprocess,
+                extension
             )
         else:
             message_up = db.upload_image(user_id, filename, extension,
@@ -114,7 +115,35 @@ def handler_get_processed_image():
     """
     Retrieve a processed image from teh database.
     """
-    pass
+    try:
+        user_id = r['user_id']
+        filename = r['filename']
+        extension = r['extension']
+        method = r['method']
+        if not isinstance(method, list):
+            method = [method]
+        proc_image = db.ProcessedImage.objects.userprocessedimage(
+            user_id,
+            filename,
+            extension,
+            method
+        )
+        return_dict = {
+            'img': proc_image.image,
+            'filename': proc_image.filename,
+            'extension': proc_image.extension,
+            'method': proc_image.procedureType
+        }
+        return jsonify(return_dict), 200
+    except KeyError as e:
+        errormessage = 'Field {} is missing.'.format(e)
+        return jsonify(errormessage), 400
+    except db.ProcessedImage.DoesNotExist:
+        out = 'Requested Image does not exist: {}, {}.{}'.format(user_id,
+                                                                 filename,
+                                                                 extension,
+                                                                 method)
+        return jsonify(out), 404
 
 
 @app.route("/api/user_metadata", methods=["POST"])
@@ -125,8 +154,8 @@ def handler_user_metadata():
     r = request.get_json()
     try:
         user_id = r['user_id']
-        images = Image.objects.user(user_id)
-        processimages = ProcessedImages.objects.user(user_id)
+        images = db.Image.objects.user(user_id)
+        processimages = db.ProcessedImages.objects.user(user_id)
         filenames = [img.filename for img in images]
         extensions = [img.extension for img in images]
         proc_filenames = [img.filename for img in processimages]
