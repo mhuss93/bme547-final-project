@@ -16,11 +16,15 @@ class ImageQuerySet(QuerySet):
         return self.raw({'user': user_id, 'filename': filename,
                          'extension': extension}).first()
 
-    def userprocessedimage(self, user_id, filename, extension, procedure):
+    def userprocessedimage(self, user_id, filename, extension, method):
         '''Return user image indentified by filename and extension.'''
         return self.raw({'user': user_id, 'filename': filename,
                          'extension': extension,
-                         'procedureType': [procedure]}).first()
+                         'procedureType': method}).first()
+
+    def proc(self, user_id, method):
+        '''Return all processed images that have undergone this method.'''
+        return self.raw({'user': user_id, 'procedureType': method})
 
 
 ImageManager = Manager.from_queryset(ImageQuerySet)
@@ -213,3 +217,21 @@ def save_processed_image(filename, proc_image_str, user_id, proceduretype,
                                                                 user_id,
                                                                 time)
     return out
+
+
+def get_average(user_id, method):
+    """Get the average amount of time in (s) it takes to run method for user.
+
+    :param user_id: User ID.
+    :type user_id: str
+    :param method: Method type.
+    :type method: str, list
+    :return: Average time.
+    :rtype: Float
+    """
+    import numpy as np
+    if not isinstance(method, list):
+        method = [method]
+    procs = ProcessedImage.objects.proc(user_id, method)
+    t_av = np.mean([proc.timeToProcess for proc in procs])
+    return t_av
