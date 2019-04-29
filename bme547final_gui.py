@@ -318,7 +318,7 @@ def window2():
         img2_obj.thumbnail(size)
         img2 = ImageTk.PhotoImage(img2_obj)
         img2_space.configure(image=img2)
-        img2_space.image  = img2
+        img2_space.image = img2
         proctime_lbl.configure(text="Time for Processing: "+proc_time)
         proctime_lbl.text = "Time for Processing: "+proc_time
         timestamp_lbl.configure(text="Time of Upload: "+procAt)
