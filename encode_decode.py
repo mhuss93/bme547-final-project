@@ -61,7 +61,7 @@ def imgArray2str(img):
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
     b64_imgString = str(img_buf_64, encoding='utf-8')
-    payload = {"img" : b64_imgString}
+    payload = {"img": b64_imgString}
     return b64_imgString
 
 
@@ -80,7 +80,7 @@ def imgArray2str2(img):
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
     b64_imgString = str(img_buf_64, encoding='utf-8')
-    payload = {"img" : b64_imgString}
+    payload = {"img": b64_imgString}
     return b64_imgString
 
 
