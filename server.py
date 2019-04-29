@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from pymodm.errors import ValidationError
 import datetime
 import database as db
+from database import UserExists
 
 
 app = Flask(__name__)
@@ -75,7 +76,7 @@ def handler_register_user():
         return jsonify(message), 200
     except ValidationError as e:
         return jsonify(e.message), 422
-    except db.UserExists as e:
+    except UserExists as e:
         out = "User exists."
         return jsonify(out), 200
     except KeyError as e:
@@ -162,7 +163,7 @@ def handler_user_metadata():
     try:
         user_id = r['user_id']
         images = db.Image.objects.user(user_id)
-        processimages = db.ProcessedImages.objects.user(user_id)
+        processimages = db.ProcessedImage.objects.user(user_id)
         filenames = [img.filename for img in images]
         extensions = [img.extension for img in images]
         proc_filenames = [img.filename for img in processimages]
