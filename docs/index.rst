@@ -25,9 +25,8 @@ Image Processing
 .. automodule:: img_proc_server
    :members:
 
-.. automodule:: img_proc
+.. automodule:: encode_decode
    :members:
-
 
 Indices and tables
 ==================
