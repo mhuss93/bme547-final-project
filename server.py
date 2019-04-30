@@ -15,11 +15,11 @@ def server_on():
 
 @app.route("/api/upload_user_image", methods=["POST"])
 def handler_upload_user_images():
-    import datetime
-    from encode_decode import imgArray2str, str2imgArray
     """
     Uploads a new image for a given user.
     """
+    import datetime
+    from encode_decode import imgArray2str, str2imgArray
 
     r = request.get_json()
     try:

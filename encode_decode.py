@@ -11,16 +11,14 @@ import cv2
 
 # Encode image file to str
 def imgFile2str(img_loc):
-    """
-    Takes in address of image file to be encoded into str.
-    Encodes the image into a string.
+    """Converts image from address to Base64 encoded string.
 
-    param:
-    img_loc - location of address
-
-    returns:
-    img_str - string of encoded image
+    :param img_loc: Image address.
+    :type img_loc: str
+    :return: Base64 encoded image.
+    :rtype: str
     """
+
     with open(img_loc, "rb") as imageFile:
         img_str = base64.b64encode(imageFile.read())
         imageFile.close()
@@ -29,16 +27,14 @@ def imgFile2str(img_loc):
 
 # Decode str file to image
 def str2imgFile(img_loc, img_str):
-    """
-    Takes in name of encoded image to save as file.
-    Decodes the string and saves the image.
+    """Saves Base64 encoded string to disk as image.
 
-    param:
-    img_loc - location of address
-    img_str - the string of the image
-
-    returns:
-    nothing
+    :param img_loc: Location to save image.
+    :type img_loc: str
+    :param img_str: [Base64 encoded image string.
+    :type img_str: str
+    :return: 0 (complete execution)
+    :rtype: int
     """
     with open(img_loc, "wb") as fh:
         decstr = base64.b64decode(img_str)
@@ -49,15 +45,12 @@ def str2imgFile(img_loc, img_str):
 
 # Encode image array to str
 def imgArray2str(img):
-    """
-    Takes in image rbg array to be encoded into str.
-    Encodes the array into a string.
+    """Convert image array to base64 encoded string.
 
-    param:
-    img - image rgb array
-
-    returns:
-    img_str - string of encoded image
+    :param img: Image array.
+    :type img: np.array
+    :return: Base64 encoded string.
+    :rtype: [type]
     """
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
@@ -68,15 +61,12 @@ def imgArray2str(img):
 
 # Encode image array to str
 def imgArray2str2(img):
-    """
-    Takes in image rbg array to be encoded into str.
-    Encodes the array into a string.
+    """Convert image array to base64 encoded string.
 
-    param:
-    img - image rgb array
-
-    returns:
-    img_str - string of encoded image
+    :param img: Image array.
+    :type img: np.array
+    :return: Base64 encoded string.
+    :rtype: [type]
     """
     _, img_buf = cv2.imencode(".png", img)
     img_buf_64 = base64.b64encode(img_buf)
@@ -87,15 +77,12 @@ def imgArray2str2(img):
 
 # Decode str to image array
 def str2imgArray(img_str):
-    """
-    Takes in name of encoded image to save.
-    Decodes the string and saves the image.
+    """Convert Base64 encoded image string.
 
-    param:
-    img_loc - location of address
-
-    returns:
-    img - array of decoded image
+    :param img_str: Base64 encoded image.
+    :type img_str: str
+    :return: Image array.
+    :rtype: np.array
     """
     img_bytes = base64.b64decode(img_str)
     img_buf = io.BytesIO(img_bytes)
