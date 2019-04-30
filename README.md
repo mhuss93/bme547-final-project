@@ -1,6 +1,10 @@
 # bme547-final-project
 Image Processor Final Project (Spring 2019)
 
+[![Build Status](https://travis-ci.org/mhuss93/bme547final.svg?branch=master)](https://travis-ci.org/mhuss93/bme547final)
+
+[![Documentation Status](https://readthedocs.org/projects/bme547final/badge/?version=latest)](https://bme547final.readthedocs.io/en/latest/?badge=latest)
+
 ## Overview of Project and GUI functionality:
 In this project we develop an image processing server. A client operates the server using a GUI
 that allows to choose a picture or several picture of type .JPG, .PNG, or .TIFF from their hard drive.
@@ -10,7 +14,7 @@ The client has 4 option for processing the image: Histrogram Equalization (defau
 ## Setting up the program:
 Run the bme547final_gui.py file to activate the GUI.
 
-## Guite for using GUI:
+## Guide for using GUI:
 1. You MUST enter a user ID and click the 'Enter ID' button
 2. Browse - click browse to choose an image of folder of images to be processed
 3. On left side of window, click a radio button of the process you want to have performed on your image.
