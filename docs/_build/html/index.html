@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to bme547_final_project’s documentation! &#8212; bme547_final_project 29.04.2019 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-bme547-final-project-s-documentation">
+<h1>Welcome to bme547_final_project’s documentation!<a class="headerlink" href="#welcome-to-bme547-final-project-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="module-server">
+<span id="server"></span><h1>Server<a class="headerlink" href="#module-server" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="server.handler_get_processed_image">
+<code class="descclassname">server.</code><code class="descname">handler_get_processed_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_get_processed_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a processed image from teh database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_get_uploaded_image">
+<code class="descclassname">server.</code><code class="descname">handler_get_uploaded_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_get_uploaded_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an image from the database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_image_processing_metdata">
+<code class="descclassname">server.</code><code class="descname">handler_image_processing_metdata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_image_processing_metdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data about image processing operations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_process_existing_image">
+<code class="descclassname">server.</code><code class="descname">handler_process_existing_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_process_existing_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an image already on the server.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_register_user">
+<code class="descclassname">server.</code><code class="descname">handler_register_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_register_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a User on the database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_upload_user_images">
+<code class="descclassname">server.</code><code class="descname">handler_upload_user_images</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_upload_user_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads a new image for a given user.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="server.handler_user_metadata">
+<code class="descclassname">server.</code><code class="descname">handler_user_metadata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#server.handler_user_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve user data.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-database">
+<span id="database"></span><h1>Database<a class="headerlink" href="#module-database" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="database.Image">
+<em class="property">class </em><code class="descclassname">database.</code><code class="descname">Image</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.Image" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="exception">
+<dt id="database.Image.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#database.Image.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="database.Image.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#database.Image.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.ImageQuerySet">
+<em class="property">class </em><code class="descclassname">database.</code><code class="descname">ImageQuerySet</code><span class="sig-paren">(</span><em>model=None</em>, <em>query=None</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ImageQuerySet" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="database.ImageQuerySet.proc">
+<code class="descname">proc</code><span class="sig-paren">(</span><em>user_id</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ImageQuerySet.proc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all processed images that have undergone this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="database.ImageQuerySet.user">
+<code class="descname">user</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ImageQuerySet.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all images uploaded by a User</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="database.ImageQuerySet.userimage">
+<code class="descname">userimage</code><span class="sig-paren">(</span><em>user_id</em>, <em>filename</em>, <em>extension</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ImageQuerySet.userimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return user image indentified by filename and extension.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="database.ImageQuerySet.userprocessedimage">
+<code class="descname">userprocessedimage</code><span class="sig-paren">(</span><em>user_id</em>, <em>filename</em>, <em>extension</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ImageQuerySet.userprocessedimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return user image indentified by filename and extension.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.ProcessedImage">
+<em class="property">class </em><code class="descclassname">database.</code><code class="descname">ProcessedImage</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.ProcessedImage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="exception">
+<dt id="database.ProcessedImage.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#database.ProcessedImage.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="database.ProcessedImage.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#database.ProcessedImage.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="database.User">
+<em class="property">class </em><code class="descclassname">database.</code><code class="descname">User</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#database.User" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="exception">
+<dt id="database.User.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#database.User.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="database.User.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#database.User.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="database.UserExists">
+<em class="property">exception </em><code class="descclassname">database.</code><code class="descname">UserExists</code><a class="headerlink" href="#database.UserExists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="database.get_average">
+<code class="descclassname">database.</code><code class="descname">get_average</code><span class="sig-paren">(</span><em>user_id</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#database.get_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the average amount of time in (s) it takes to run method for user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> (<em>str</em>) – User ID.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>list</em>) – Method type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Average time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.get_uploaded_image">
+<code class="descclassname">database.</code><code class="descname">get_uploaded_image</code><span class="sig-paren">(</span><em>user_id</em>, <em>filename</em>, <em>extension</em><span class="sig-paren">)</span><a class="headerlink" href="#database.get_uploaded_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an uploaded image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> (<em>str</em>) – Unique User identifier.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Filename.</p></li>
+<li><p><strong>extension</strong> (<em>str</em>) – Image extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary of image data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.process_image">
+<code class="descclassname">database.</code><code class="descname">process_image</code><span class="sig-paren">(</span><em>img</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#database.process_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform image manipulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>np.array</em>) – Image array.</p></li>
+<li><p><strong>method</strong> (<em>ster</em>) – Manipulation method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Incorrect image method submitted.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Time to perform operation, processed image.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>datetime.timedelta, np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.register_user">
+<code class="descclassname">database.</code><code class="descname">register_user</code><span class="sig-paren">(</span><em>user_id</em><span class="sig-paren">)</span><a class="headerlink" href="#database.register_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new User on the Database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_id</strong> (<em>str</em>) – Unique User Identifier.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#database.UserExists" title="database.UserExists"><strong>UserExists</strong></a> – Exception if User already exists.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Operation completed string.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.save_processed_image">
+<code class="descclassname">database.</code><code class="descname">save_processed_image</code><span class="sig-paren">(</span><em>filename</em>, <em>proc_image_str</em>, <em>user_id</em>, <em>proceduretype</em>, <em>processedat</em>, <em>timetoprocess</em>, <em>extension</em>, <em>already_processed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#database.save_processed_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a processed image to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – Base image filename.</p></li>
+<li><p><strong>proc_image_str</strong> (<em>str</em>) – Base64 encoded processed image.</p></li>
+<li><p><strong>user_id</strong> (<em>str</em>) – User ID.</p></li>
+<li><p><strong>proceduretype</strong> (<em>str</em>) – Procedure performed.</p></li>
+<li><p><strong>processedat</strong> (<em>datetime object</em>) – Time image was processed.</p></li>
+<li><p><strong>timetoprocess</strong> (<em>float</em>) – Time taken to process image (s)</p></li>
+<li><p><strong>already_processed</strong> (<em>bool</em><em>, </em><em>optional</em>) – If image has alrady been processed, defaults to
+False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="database.upload_image">
+<code class="descclassname">database.</code><code class="descname">upload_image</code><span class="sig-paren">(</span><em>user_id</em>, <em>filename</em>, <em>extension</em>, <em>image_str</em><span class="sig-paren">)</span><a class="headerlink" href="#database.upload_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a base-64 encoded image to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> (<em>str</em>) – Unique User identifier.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Image filename.</p></li>
+<li><p><strong>extension</strong> (<em>str</em>) – Image extension.</p></li>
+<li><p><strong>image_str</strong> (<em>str</em>) – Base-64 encoded image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Job completed message.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-img_proc_server">
+<span id="image-processing"></span><h1>Image Processing<a class="headerlink" href="#module-img_proc_server" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="img_proc_server.RGB">
+<code class="descclassname">img_proc_server.</code><code class="descname">RGB</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.RGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes img as np.array. Seperates rgb values and returns 3 arrays.</p>
+<p>param:
+img - array of image after performing imread</p>
+<p>returns:
+r, g, b - arrays of values for each color</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc_server.contr_stretch_img">
+<code class="descclassname">img_proc_server.</code><code class="descname">contr_stretch_img</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.contr_stretch_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes contrast stretch and returns both the input img and stretched img.</p>
+<p>param:
+img - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+stretch_img - 2D array of stretched image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc_server.equalize_img">
+<code class="descclassname">img_proc_server.</code><code class="descname">equalize_img</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.equalize_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes equalization and returns both the input img and equalized img.</p>
+<p>param:
+img - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+equalized - 2D array of equalized image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc_server.log_correct_img">
+<code class="descclassname">img_proc_server.</code><code class="descname">log_correct_img</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.log_correct_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes log correction and returns both the input img and corrected img.</p>
+<p>param:
+img - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+log_img - 2D array of log corrected image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc_server.plot_rgb">
+<code class="descclassname">img_proc_server.</code><code class="descname">plot_rgb</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.plot_rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the 3 histograms for colors red, green blue of inputted image array</p>
+<p>param:
+r, g, b - arrays of values for each color</p>
+<p>returns:
+nothing - plots the histograms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc_server.reverse_img">
+<code class="descclassname">img_proc_server.</code><code class="descname">reverse_img</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc_server.reverse_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes log correction and returns both the input img and corrected img.</p>
+<p>param:
+img - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+reverse_img - 2D array of reversed image</p>
+</dd></dl>
+
+<span class="target" id="module-img_proc"></span><dl class="function">
+<dt id="img_proc.RGB">
+<code class="descclassname">img_proc.</code><code class="descname">RGB</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.RGB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes img as np.array. Seperates rgb values and returns 3 arrays.</p>
+<p>param:
+img - array of image after performing imread</p>
+<p>returns:
+r, g, b - arrays of values for each color</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc.contr_stretch_img">
+<code class="descclassname">img_proc.</code><code class="descname">contr_stretch_img</code><span class="sig-paren">(</span><em>img_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.contr_stretch_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes contrast stretch and returns both the input img and stretched img.</p>
+<p>param:
+img_loc - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+stretch_img - 2D array of stretched image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc.equalize_img">
+<code class="descclassname">img_proc.</code><code class="descname">equalize_img</code><span class="sig-paren">(</span><em>img_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.equalize_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes equalization and returns both the input img and equalized img.</p>
+<p>param:
+img_loc - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+eq - 2D array of equalized image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc.log_correct_img">
+<code class="descclassname">img_proc.</code><code class="descname">log_correct_img</code><span class="sig-paren">(</span><em>img_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.log_correct_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes log correction and returns both the input img and corrected img.</p>
+<p>param:
+img_loc - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+log_img - 2D array of log corrected image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc.plot_rgb">
+<code class="descclassname">img_proc.</code><code class="descname">plot_rgb</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.plot_rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the 3 histograms for colors red, green blue of inputted image array</p>
+<p>param:
+r, g, b - arrays of values for each color</p>
+<p>returns:
+nothing - plots the histograms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="img_proc.reverse_img">
+<code class="descclassname">img_proc.</code><code class="descname">reverse_img</code><span class="sig-paren">(</span><em>img_loc</em><span class="sig-paren">)</span><a class="headerlink" href="#img_proc.reverse_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take address of image to be processed as img_loc.
+Computes log correction and returns both the input img and corrected img.</p>
+<p>param:
+img_loc - address to access image to be processed</p>
+<p>returns:
+img - 2D array of input image
+log_img - 2D array of log corrected image</p>
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">bme547_final_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Katrina Barth, Minhaj Hussain, Iakov Rachinskiy.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
