@@ -258,7 +258,9 @@ def window2():
     window2 = Toplevel()
     window2.title("Processed Image Viewer")
     # In-window global variables
+    global img1_array
     img1_array = np.empty([2, 2])
+    global img2_array
     img2_array = np.empty([2, 2])
     # Get of file names and extensions
     userID_dic = {
@@ -544,6 +546,7 @@ def window2():
                 "method": method
                 }
         img1_array = get_up_img(dic1)
+        print(img1_array)
         img1_obj = Image.fromarray(img1_array)
         size = (375, 375)
         img1_obj.thumbnail(size)
@@ -571,9 +574,10 @@ def window2():
     refresh_btn.grid(column=5, row=0, pady=5, sticky=W)
     # Button to open histogram window
     window2.grid_rowconfigure(3, weight=1)
-    histo_btn = ttk.Button(window2,
-                           text='Show Color Histograms',
-                           command=lambda: plt_histo(img1_array, img2_array))
+    histo_btn = ttk.Button(
+        window2,
+        text='Show Color Histograms',
+        command=lambda: plt_histo(img1_array, img2_array))
     histo_btn.grid(column=5, row=3, pady=10, columnspan=2, sticky=N)
     # Choose the save file type, with JPEG as default
     file_type = StringVar()
@@ -645,6 +649,7 @@ def plt_histo(img1_array, img2_array):
     :type img2_array: Array
     """
     # Generate arrays of color values from image files
+    print(img1_array)
     img1_shape = img1_array.shape
     img2_shape = img2_array.shape
     r1 = []
