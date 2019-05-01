@@ -23,7 +23,7 @@ import os
 
 # Global variables
 url = 'http://vcm-8935.vm.duke.edu:5000'
-#url = 'http://127.0.0.1:5000'
+# url = 'http://127.0.0.1:5000'
 multi_file = 0
 userID = ''
 mockDB = {}
@@ -281,7 +281,7 @@ def window2():
         """
         Convert a list of image processing methods applied to an image into
         a single string.
-        
+
         :param method_list: List of methods.
         :type method_list: list
         :return: String of methods separated by whitespace.
@@ -301,7 +301,7 @@ def window2():
     def get_method_options(filename, extension):
         """
         Get list of valid methods given filename and extension.
-        
+
         :param filename: Filename.
         :type filename: str
         :param extension: Extension.
@@ -316,7 +316,7 @@ def window2():
     def get_ext_options(filename):
         """
         Get list of valid extensions given filename.
-        
+
         :param filename: Filename.
         :type filename: str
         :return: Extensions of previously uploaded files sharing the filename.
@@ -335,7 +335,7 @@ def window2():
         """
         Update the dropdown method list given the selected
         filename and extension.
-        
+
         :param extension: Extension.
         :type extension: str
         """
@@ -358,7 +358,7 @@ def window2():
     def update_ext_options(filename):
         """
         Update the dropdown extension list given the selected filename.
-        
+
         :param filename: Filename.
         :type extension: str
         """
