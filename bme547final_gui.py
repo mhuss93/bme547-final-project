@@ -345,7 +345,7 @@ def window2():
         options = [method_list_to_string(i) for i in options]
         for string in options:
             menu.add_command(
-                label=string, 
+                label=string,
                 command=lambda value=string: variable_method.set(value)
             )
         variable_method.set(options[0])
@@ -367,7 +367,7 @@ def window2():
         options = get_ext_options(variable.get())
         for string in options:
             menu.add_command(
-                label=string, 
+                label=string,
                 command=lambda value=string: variable_ext.set(value)
             )
         variable_ext.set(options[0])
@@ -377,8 +377,6 @@ def window2():
     drop_menu = OptionMenu(window2, variable, *unique_filenames,
                            command=update_ext_options)
     drop_menu.grid(column=2, row=0, pady=5, padx=10)
-
-
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
                          width=250, height=95)
@@ -511,7 +509,6 @@ def window2():
         """
         global img1_array
         global img2_array
-  
         """
         for i in range(len(file_names)):
             if file_names[i] == variable.get():
@@ -524,14 +521,12 @@ def window2():
         file_name = variable.get()
         extension = variable_ext.get()
         method = variable_method.get().split()
-        proc_time = [i[3] for i in proc_data
-                           if (i[0] == file_name and
-                               i[1] == extension and
-                               i[2] == method)][0]
-        procAt = [i[4] for i in proc_data
-                           if (i[0] == file_name and
-                               i[1] == extension and
-                               i[2] == method)][0]
+        proc_time = [i[3] for i in proc_data if (i[0] == file_name and
+                                                 i[1] == extension and
+                                                 i[2] == method)][0]
+        procAt = [i[4] for i in proc_data if (i[0] == file_name and
+                                              i[1] == extension and
+                                              i[2] == method)][0]
 
         dic1 = {
                "user_id": userID,
