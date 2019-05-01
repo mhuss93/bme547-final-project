@@ -59,6 +59,10 @@ def main_window():
         """
         global userID
         userID = userID_box.get()
+        open_file_box.delete(0, END)
+        open_folder_box.delete(0, END)
+        proc_choice.set('Hist')
+        mockDB.clear()
         mockDB["user_id"] = userID
         requests.post(url + "/api/register_user", json=mockDB)
         pass
