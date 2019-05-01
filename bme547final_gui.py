@@ -23,11 +23,10 @@ import os
 
 # Global variables
 url = 'http://vcm-8935.vm.duke.edu:5000'
+# url = 'http://127.0.0.1:5000'
 multi_file = 0
 userID = ''
-mockDB = {
-
-          }
+mockDB = {}
 
 
 def main_window():
@@ -264,18 +263,120 @@ def window2():
     post_adrs = url + "/api/user_metadata"
     r = requests.post(post_adrs, json=userID_dic)
     meta_dic = r.json()
+
     file_names = meta_dic["filenames"]
     extensions = meta_dic["extension"]
+    proc_file_names = meta_dic["proc_filenames"]
+    proc_extensions = meta_dic["proc_extensions"]
     methods = meta_dic["proc_types"]
     proc_time_list = meta_dic["proc_times"]
     processedAt_list = meta_dic["proc_processedAt"]
+    proc_data = list(zip(proc_file_names, proc_extensions, methods,
+                         proc_time_list, processedAt_list))
     # Drop down menu to select file to view
     drop_lbl = ttk.Label(window2, text='Select Image to View:')
-    drop_lbl.grid(column=2, row=0, columnspan=2, pady=5, sticky=E)
+    drop_lbl.grid(column=0, row=0, columnspan=2, pady=5, sticky=E)
+
+    def method_list_to_string(method_list):
+        """
+        Convert a list of image processing methods applied to an image into
+        a single string.
+
+        :param method_list: List of methods.
+        :type method_list: list
+        :return: String of methods separated by whitespace.
+        :rtype: str
+        """
+        return ''.join(method_list)
+
     variable = StringVar(window2)
     variable.set(file_names[0])
-    drop_menu = OptionMenu(window2, variable, *file_names)
-    drop_menu.grid(column=4, row=0, pady=5, padx=10)
+
+    variable_method = StringVar(window2)
+    variable_method.set(method_list_to_string(methods[0]))
+
+    variable_ext = StringVar(window2)
+    variable_ext.set(extensions[0])
+
+    def get_method_options(filename, extension):
+        """
+        Get list of valid methods given filename and extension.
+
+        :param filename: Filename.
+        :type filename: str
+        :param extension: Extension.
+        :type extension: str
+        :return: Processing methods that have been applied to the image.
+        :rtype: list
+        """
+        options = [i[2] for i in proc_data
+                   if (i[0] == filename and i[1] == extension)]
+        return options
+
+    def get_ext_options(filename):
+        """
+        Get list of valid extensions given filename.
+
+        :param filename: Filename.
+        :type filename: str
+        :return: Extensions of previously uploaded files sharing the filename.
+        :rtype: list
+        """
+        options = [i[1] for i in zip(file_names, extensions)
+                   if i[0] == filename]
+        return options
+
+    method_options = get_method_options(file_names[0], extensions[0])
+    method_options = [method_list_to_string(i) for i in method_options]
+    drop_menu_method = OptionMenu(window2, variable_method, *method_options)
+    drop_menu_method.grid(column=4, row=0, pady=5, padx=10)
+
+    def update_method_options(extension):
+        """
+        Update the dropdown method list given the selected
+        filename and extension.
+
+        :param extension: Extension.
+        :type extension: str
+        """
+        menu = drop_menu_method["menu"]
+        menu.delete(0, "end")
+        options = get_method_options(variable.get(), extension)
+        options = [method_list_to_string(i) for i in options]
+        for string in options:
+            menu.add_command(
+                label=string,
+                command=lambda value=string: variable_method.set(value)
+            )
+        variable_method.set(options[0])
+
+    ext_options = get_ext_options(file_names[0])
+    drop_menu_ext = OptionMenu(window2, variable_ext, *ext_options,
+                               command=update_method_options)
+    drop_menu_ext.grid(column=3, row=0, pady=5, padx=10)
+
+    def update_ext_options(filename):
+        """
+        Update the dropdown extension list given the selected filename.
+
+        :param filename: Filename.
+        :type extension: str
+        """
+        menu = drop_menu_ext["menu"]
+        menu.delete(0, "end")
+        options = get_ext_options(variable.get())
+        for string in options:
+            menu.add_command(
+                label=string,
+                command=lambda value=string: variable_ext.set(value)
+            )
+        variable_ext.set(options[0])
+        update_method_options(variable_ext.get())
+
+    unique_filenames = list(set(file_names))
+    drop_menu = OptionMenu(window2, variable, *unique_filenames,
+                           command=update_ext_options)
+    drop_menu.grid(column=2, row=0, pady=5, padx=10)
     # Frame for metadata
     data_frm = ttk.Frame(window2, borderwidth=1, relief=GROOVE,
                          width=250, height=95)
@@ -336,7 +437,16 @@ def window2():
         img1_array = mpimg.imread(img_buf,
                                   format=dic_short['extension'])
         return img1_array
-    img1_array = get_up_img(mockDB)
+    if 'filename' in mockDB:
+        img1_array = get_up_img(mockDB)
+    else:
+        feed_dict = {
+            'user_id': userID,
+            'filename': file_names[0],
+            'extension': extensions[0],
+            'method': methods[0]
+        }
+        img1_array = get_up_img(feed_dict)
     img1_obj = Image.fromarray(img1_array)
     size = (375, 375)
     img1_obj.thumbnail(size)
@@ -370,7 +480,17 @@ def window2():
         img2_array = mpimg.imread(img_buf,
                                   format=dic_short['extension'])
         return img2_array
-    img2_array = get_proc_img(mockDB)
+
+    if 'filename' in mockDB:
+        img2_array = get_proc_img(mockDB)
+    else:
+        feed_dict = {
+            'user_id': userID,
+            'filename': file_names[0],
+            'extension': extensions[0],
+            'method': methods[0]
+        }
+        img2_array = get_proc_img(feed_dict)
     img2_obj = Image.fromarray(img2_array)
     size = (375, 375)
     img2_obj.thumbnail(size)
@@ -389,6 +509,7 @@ def window2():
         """
         global img1_array
         global img2_array
+        """
         for i in range(len(file_names)):
             if file_names[i] == variable.get():
                 file_name = file_names[i]
@@ -396,6 +517,17 @@ def window2():
                 method = methods[i]
                 proc_time = proc_time_list[i]
                 procAt = processedAt_list[i]
+        """
+        file_name = variable.get()
+        extension = variable_ext.get()
+        method = variable_method.get().split()
+        proc_time = [i[3] for i in proc_data if (i[0] == file_name and
+                                                 i[1] == extension and
+                                                 i[2] == method)][0]
+        procAt = [i[4] for i in proc_data if (i[0] == file_name and
+                                              i[1] == extension and
+                                              i[2] == method)][0]
+
         dic1 = {
                "user_id": userID,
                "filename": file_name,

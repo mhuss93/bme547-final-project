@@ -167,6 +167,7 @@ def handler_user_metadata():
         filenames = [img.filename for img in images]
         extensions = [img.extension for img in images]
         proc_filenames = [img.filename for img in processimages]
+        proc_extensions = [img.extension for img in processimages]
         proc_times = [img.timeToProcess for img in processimages]
         processedAt = [img.processedAt for img in processimages]
         proc_types = [img.procedureType for img in processimages]
@@ -176,6 +177,7 @@ def handler_user_metadata():
             'extension': extensions,
             'proc_filenames': proc_filenames,
             'proc_times': proc_times,
+            'proc_extensions': proc_extensions,
             'proc_processedAt': processedAt,
             'proc_types': proc_types
         }
