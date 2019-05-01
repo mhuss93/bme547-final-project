@@ -546,7 +546,6 @@ def window2():
                 "method": method
                 }
         img1_array = get_up_img(dic1)
-        print(img1_array)
         img1_obj = Image.fromarray(img1_array)
         size = (375, 375)
         img1_obj.thumbnail(size)
@@ -649,7 +648,6 @@ def plt_histo(img1_array, img2_array):
     :type img2_array: Array
     """
     # Generate arrays of color values from image files
-    print(img1_array)
     img1_shape = img1_array.shape
     img2_shape = img2_array.shape
     r1 = []
