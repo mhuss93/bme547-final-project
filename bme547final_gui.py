@@ -25,9 +25,7 @@ import os
 url = 'http://vcm-8935.vm.duke.edu:5000'
 multi_file = 0
 userID = ''
-mockDB = {
-
-          }
+mockDB = {}
 
 
 def main_window():
@@ -336,7 +334,16 @@ def window2():
         img1_array = mpimg.imread(img_buf,
                                   format=dic_short['extension'])
         return img1_array
-    img1_array = get_up_img(mockDB)
+    if 'filename' in mockDB:
+        img1_array = get_up_img(mockDB)
+    else:
+        feed_dict = {
+            'user_id': userID,
+            'filename': file_names[0],
+            'extension': extensions[0],
+            'method': methods[0]
+        }
+        img1_array = get_up_img(feed_dict)
     img1_obj = Image.fromarray(img1_array)
     size = (375, 375)
     img1_obj.thumbnail(size)
@@ -370,7 +377,17 @@ def window2():
         img2_array = mpimg.imread(img_buf,
                                   format=dic_short['extension'])
         return img2_array
-    img2_array = get_proc_img(mockDB)
+
+    if 'filename' in mockDB:
+        img2_array = get_proc_img(mockDB)
+    else:
+        feed_dict = {
+            'user_id': userID,
+            'filename': file_names[0],
+            'extension': extensions[0],
+            'method': methods[0]
+        }
+        img2_array = get_proc_img(feed_dict)
     img2_obj = Image.fromarray(img2_array)
     size = (375, 375)
     img2_obj.thumbnail(size)
