@@ -22,8 +22,8 @@ from flask import Flask, jsonify, request
 import os
 
 # Global variables
-#url = 'http://vcm-8935.vm.duke.edu:5000'
-url = 'http://127.0.0.1:5000'
+url = 'http://vcm-8935.vm.duke.edu:5000'
+#url = 'http://127.0.0.1:5000'
 multi_file = 0
 userID = ''
 mockDB = {}
@@ -278,6 +278,15 @@ def window2():
     drop_lbl.grid(column=0, row=0, columnspan=2, pady=5, sticky=E)
 
     def method_list_to_string(method_list):
+        """
+        Convert a list of image processing methods applied to an image into
+        a single string.
+        
+        :param method_list: List of methods.
+        :type method_list: list
+        :return: String of methods separated by whitespace.
+        :rtype: str
+        """
         return ''.join(method_list)
 
     variable = StringVar(window2)
@@ -290,11 +299,29 @@ def window2():
     variable_ext.set(extensions[0])
 
     def get_method_options(filename, extension):
+        """
+        Get list of valid methods given filename and extension.
+        
+        :param filename: Filename.
+        :type filename: str
+        :param extension: Extension.
+        :type extension: str
+        :return: Processing methods that have been applied to the image.
+        :rtype: list
+        """
         options = [i[2] for i in proc_data
                    if (i[0] == filename and i[1] == extension)]
         return options
 
     def get_ext_options(filename):
+        """
+        Get list of valid extensions given filename.
+        
+        :param filename: Filename.
+        :type filename: str
+        :return: Extensions of previously uploaded files sharing the filename.
+        :rtype: list
+        """
         options = [i[1] for i in zip(file_names, extensions)
                    if i[0] == filename]
         return options
@@ -305,6 +332,13 @@ def window2():
     drop_menu_method.grid(column=4, row=0, pady=5, padx=10)
 
     def update_method_options(extension):
+        """
+        Update the dropdown method list given the selected
+        filename and extension.
+        
+        :param extension: Extension.
+        :type extension: str
+        """
         menu = drop_menu_method["menu"]
         menu.delete(0, "end")
         options = get_method_options(variable.get(), extension)
@@ -322,6 +356,12 @@ def window2():
     drop_menu_ext.grid(column=3, row=0, pady=5, padx=10)
 
     def update_ext_options(filename):
+        """
+        Update the dropdown extension list given the selected filename.
+        
+        :param filename: Filename.
+        :type extension: str
+        """
         menu = drop_menu_ext["menu"]
         menu.delete(0, "end")
         options = get_ext_options(variable.get())
